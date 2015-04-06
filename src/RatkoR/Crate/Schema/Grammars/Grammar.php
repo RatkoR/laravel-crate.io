@@ -77,10 +77,10 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	 * Returns fulltext analyzer language if it is given
 	 * in options.
 	 * 
-	 * @param array $options
+	 * @param string $options
 	 * @return string or null
 	 */
-	protected function getFulltextAnalyzer(array $options)
+	protected function getFulltextAnalyzer($options)
 	{
 		if (strpos($options,':') === false)
 			return null;
