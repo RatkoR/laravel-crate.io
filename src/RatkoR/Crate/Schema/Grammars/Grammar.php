@@ -14,14 +14,10 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	protected $modifiers = array('Index');
 
 	/**
-	 * The possible column serials.
-	 *
-	 * @var array
-	 */
-	protected $serials = array('integer', 'long', 'short');
-
-	/**
-	 * Get the SQL for indexOff column modifier
+	 * Get the SQL for index column modifier.
+	 * 
+	 * "INDEX OFF" and "INDEX USING plain" are attached to fields.
+	 * Fulltext indexes are done as named index fields.
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $column
@@ -59,7 +55,14 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 		return "select column_name from information_schema.columns where schema_name = ? and table_name = ?";
 	}
 
-	protected function getIndexName($attributes)
+	/**
+	 * Returns index name if it is set in $attributes or generates
+	 * a default name if no name is given.
+	 *
+	 * @param  array $attributes
+	 * @return string
+	 */
+	protected function getIndexName(array $attributes)
 	{
 		if (isset($attributes['name']))
 			return $attributes['name'];
@@ -70,17 +73,34 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 		return 'ind_'.implode('_',$attributes['columns']);
 	}
 
-	protected function getFulltextAnalyzer($options)
+	/**
+	 * Returns fulltext analyzer language if it is given
+	 * in options.
+	 * 
+	 * @param array $options
+	 * @return string or null
+	 */
+	protected function getFulltextAnalyzer(array $options)
 	{
 		if (strpos($options,':') === false)
-			return false;
+			return null;
 
 		list($index, $analyzer) = explode(':', $options);
 
 		return $analyzer;
 	}
 
-	protected function createIndexSql($attributes)
+	/**
+	 * Returns SQL for named index field.
+	 * 
+	 * All fulltext indexes are created as named index fields, like:
+	 *  first_column string, <-- normal field
+	 * 	INDEX first_column_ft using fulltext (first_column) <-- named index field
+	 * 
+	 * @param array $attributes
+	 * @return string
+	 */
+	protected function createIndexSql(array $attributes)
 	{
 		$indexName = $this->getIndexName($attributes);
 		$analyzer = $this->getFulltextAnalyzer($attributes['options']);
@@ -98,6 +118,12 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 		return $sql;
 	}
 
+	/**
+	 * Returns index fields for all fulltext indexes.
+	 * 
+	 * @param \RatkoR\Crate\Schema\Blueprint $blueprint
+	 * @return array
+	 */
 	protected function getIndexes(Blueprint $blueprint)
 	{
 		$allIndexes = $blueprint->getIndexes();
@@ -122,6 +148,14 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	{
 		$columns = implode(', ', $this->getColumns($blueprint));
 
+		/**
+		 * Here we add fulltext indexes. Crate features three index types:
+		 * INDEX OFF, plain and fulltext. 'Off' and 'plain' are added by the
+		 * field definition, fulltext indexes are added here. They can span over
+		 * multiple fields and those cannot be added in the field definitions. So
+		 * we add all fulltext indexes here, even if they are only for single
+		 * field.
+		 */
 		$indexes = implode(', ', $this->getIndexes($blueprint));
 		$indexes = $indexes ? ", $indexes" : '';
 
@@ -162,7 +196,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a unique key command.
+	 * No unique indexes in crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -174,7 +208,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a plain index key command.
+	 * For crate.io, we handle indexes in getIndexes(), not here.
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -186,7 +220,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile an index creation command.
+	 * No foreign keys in crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -223,7 +257,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a drop column command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -235,7 +269,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a drop primary key command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -247,7 +281,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a drop unique key command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -259,7 +293,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a drop index command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -271,7 +305,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a drop foreign key command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -283,7 +317,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Compile a rename table command.
+	 * Not used in Crate.io
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
 	 * @param  \Illuminate\Support\Fluent  $command
@@ -296,7 +330,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 
 	/**
 	 * Create the column definition for a array type.
-	 *
+	 * 
 	 * @param  \Illuminate\Support\Fluent  $column
 	 * @return string
 	 */

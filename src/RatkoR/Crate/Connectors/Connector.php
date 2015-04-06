@@ -6,6 +6,10 @@ use Crate\PDO\PDO;
 
 class Connector extends BaseConnector implements ConnectorInterface {
 
+	/**
+	 * Crate.io has only a subset of PDO options available.
+	 * See: https://github.com/crate/crate-pdo
+	 */
 	protected $options = array(
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -13,6 +17,8 @@ class Connector extends BaseConnector implements ConnectorInterface {
 
 	/**
 	 * Create a new PDO connection.
+	 * 
+	 * Username and password are not used.
 	 *
 	 * @param  string  $dsn
 	 * @param  array   $config
@@ -42,6 +48,9 @@ class Connector extends BaseConnector implements ConnectorInterface {
 
 	/**
 	 * Create a DSN string from a configuration.
+	 * 
+	 * Crate dsn looks like:
+	 *   crate:<HOSTNAME_OR_IP>:<PORT> (eg: crate:localhost:4200)
 	 *
 	 * @param  array   $config
 	 * @return string

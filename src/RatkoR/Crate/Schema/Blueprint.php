@@ -5,15 +5,30 @@ use Illuminate\Database\Connection;
 
 class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 
+	/**
+	 * Array of all fulltext indexes.
+	 * 
+	 * Fulltext indexes are created as named index fields. used if a field
+	 * has fulltext index attached to it as (for example):
+	 *   $table->string('myString')->index('fulltext')
+	 * In this case we store it in $indexes array so that we later create
+	 * named index fields as:
+	 *   INDEX ind_myString using fulltext (myString)
+	 */
 	protected $indexes = [];
 
+	/**
+	 * Returns all fulltext indexes.
+	 * 
+	 * @return array
+	 */
 	public function getIndexes()
 	{
 		return $this->indexes;
 	}
 
 	/**
-	 * Create a new date column on the table.
+	 * In crate.io we do timestamps.
 	 *
 	 * @param  string  $column
 	 * @return \Illuminate\Support\Fluent
@@ -24,7 +39,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Create a new date-time column on the table.
+	 * In crate.io we do timestamps.
 	 *
 	 * @param  string  $column
 	 * @return \Illuminate\Support\Fluent
@@ -35,7 +50,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Create a new binary column on the table.
+	 * Not implemented yet....
 	 *
 	 * @param  string  $column
 	 * @return \Illuminate\Support\Fluent
@@ -46,7 +61,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Create a new enum column on the table.
+	 * Enum -> string in Crate.io
 	 *
 	 * @param  string  $column
 	 * @param  array   $allowed
@@ -58,7 +73,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Create a new time column on the table.
+	 * We do timestamps for all date fields
 	 *
 	 * @param  string  $column
 	 * @return \Illuminate\Support\Fluent
@@ -69,7 +84,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Returns true if options value starts with 'fulltext'
+	 * Returns true for fulltext indexes - if options value
+	 * starts with string 'fulltext'.
+	 * 
+	 * This is true if index is created as:
+	 *   $table->string('myString')->index('fulltext') or
+	 *   $table->string('myString')->index('fulltext:english')
 	 */
 	protected function isFulltextIndex($options)
 	{
@@ -79,7 +99,14 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 		return stripos($options,'fulltext') !== false;
 	}
 
-	protected function addIndex($columns, $options)
+	/**
+	 * Specify an index
+	 *
+	 * @param  string|array  $columns
+	 * @param  array         $options
+	 * @return Blueprint
+	 */
+	public function index($columns = null, $options = array())
 	{
 		/**
 		 * PLAIN and INDEX OFF are only with column names and are not
@@ -90,22 +117,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 		if ($this->isFulltextIndex($options)) {
 			$this->indexes[] = ['columns' => $columns, 'options' => $options];
 		}
-	}
 
-	/**
-	 * Specify an index for the collection.
-	 *
-	 * @param  string|array  $columns
-	 * @param  array         $options
-	 * @return Blueprint
-	 */
-	public function index($columns = null, $options = array())
-	{
 		return $this->addIndex($columns, $options);
 	}
 
 	/**
-	 * Indicate that the given index should be dropped.
+	 * Not used in Crate.io
 	 *
 	 * @param  string|array  $columns
 	 * @return Blueprint
@@ -116,7 +133,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Specify the primary key(s) for the table.
+	 * Not used in Crate.io
 	 *
 	 * @param  string|array  $columns
 	 * @param  string  $name
@@ -128,7 +145,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Specify a unique index for the table.
+	 * Not used in Crate.io
 	 *
 	 * @param  string|array  $columns
 	 * @param  string  $name
@@ -140,7 +157,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Specify a foreign key for the table.
+	 * Not used in Crate.io
 	 *
 	 * @param  string|array  $columns
 	 * @param  string  $name
@@ -154,6 +171,18 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	/**
 	 * Create a new array column on the table.
 	 *
+	 * Array is a special field type for crate.io. In migration
+	 * it is referenced as $table->arrayField('name', 'options'),
+	 * where name is field name and options are elements that
+	 * will be in this array. 
+	 * 
+	 * Examples:
+	 *   $table->arrayField('myField1', 'integer');
+	 *   For array of integers
+	 * 
+	 *   $table->arrayField('myField2', 'object (dynamic) as (age integer, name string)');
+	 *   For array of objects
+	 *
 	 * @param  string  $column
 	 * @param  int  $length
 	 * @return \Illuminate\Support\Fluent
@@ -166,6 +195,11 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	/**
 	 * Create a new object column on the table.
 	 *
+	 * Object is a field specific to Crate.io. Can be defined
+	 * as $table->objectField('name', 'options'). Options can be a string
+	 * with all object properties. Like:
+	 *   $table->objectField('f_object', '(dynamic) as (a integer)');
+	 * 
 	 * @param  string  $column
 	 * @param  int  $length
 	 * @return \Illuminate\Support\Fluent
