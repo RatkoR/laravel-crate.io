@@ -1,4 +1,6 @@
-<?php namespace RatkoR\Crate\Processors;
+<?php namespace RatkoR\Crate\Query\Processors;
+
+use Illuminate\Database\Query\Builder;
 
 class Processor extends \Illuminate\Database\Query\Processors\Processor
 {

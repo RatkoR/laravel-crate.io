@@ -1,4 +1,4 @@
-<?php namespace RatkoR\Crate\Connection;
+<?php namespace RatkoR\Crate;
 
 use RatkoR\Crate\Schema\Builder;
 use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;

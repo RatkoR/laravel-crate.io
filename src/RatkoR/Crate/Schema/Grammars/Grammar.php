@@ -1,13 +1,17 @@
 <?php namespace RatkoR\Crate\Schema\Grammars;
 
-class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
+use RatkoR\Crate\Schema\Blueprint;
+use Illuminate\Support\Fluent;
+use RatkoR\Crate\Connection;
+
+class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 {
 	/**
 	 * The possible column modifiers.
 	 *
 	 * @var array
 	 */
-	protected $modifiers = array('IndexOff', 'IndexPlain', 'IndexFulltext');
+	protected $modifiers = array('Index');
 
 	/**
 	 * The possible column serials.
@@ -15,6 +19,25 @@ class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
 	 * @var array
 	 */
 	protected $serials = array('integer', 'long', 'short');
+
+	/**
+	 * Get the SQL for indexOff column modifier
+	 *
+	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string|null
+	 */
+	protected function modifyIndex(Blueprint $blueprint, Fluent $column)
+	{
+		if (is_null($column->index))
+			return;
+
+		if (($column->index === true) || ($column->index === 'plain'))
+			return ' INDEX using plain';
+
+		if ($column->index === 'off')
+			return ' INDEX OFF';
+	}
 
 	/**
 	 * Compile the query to determine the list of tables.
@@ -36,6 +59,57 @@ class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
 		return "select column_name from information_schema.columns where schema_name = ? and table_name = ?";
 	}
 
+	protected function getIndexName($attributes)
+	{
+		if (isset($attributes['name']))
+			return $attributes['name'];
+
+		if (!is_array($attributes['columns']))
+			return 'ind_'.$attributes['columns'];
+
+		return 'ind_'.implode('_',$attributes['columns']);
+	}
+
+	protected function getFulltextAnalyzer($options)
+	{
+		if (strpos($options,':') === false)
+			return false;
+
+		list($index, $analyzer) = explode(':', $options);
+
+		return $analyzer;
+	}
+
+	protected function createIndexSql($attributes)
+	{
+		$indexName = $this->getIndexName($attributes);
+		$analyzer = $this->getFulltextAnalyzer($attributes['options']);
+
+		$columns = is_array($attributes['columns']) ? 
+						implode(',',$attributes['columns']) :
+						$attributes['columns'];
+
+		$sql = "INDEX {$indexName} using fulltext($columns)";
+
+		if ($analyzer) {
+			$sql .= " with (analyzer = '{$analyzer}')";
+		}
+
+		return $sql;
+	}
+
+	protected function getIndexes(Blueprint $blueprint)
+	{
+		$allIndexes = $blueprint->getIndexes();
+		$compiled = [];
+
+		foreach ($allIndexes as $index) {
+			$compiled[] = $this->createIndexSql($index);
+		}
+
+		return $compiled;
+	}
+
 	/**
 	 * Compile a create table command.
 	 *
@@ -48,7 +122,10 @@ class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
 	{
 		$columns = implode(', ', $this->getColumns($blueprint));
 
-		$sql = 'create table '.$this->wrapTable($blueprint)." ($columns)";
+		$indexes = implode(', ', $this->getIndexes($blueprint));
+		$indexes = $indexes ? ", $indexes" : '';
+
+		$sql = 'create table '.$this->wrapTable($blueprint)." ($columns $indexes)";
 
 		return $sql;
 	}
@@ -215,6 +292,28 @@ class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
 	public function compileRename(Blueprint $blueprint, Fluent $command)
 	{
 		return '';
+	}
+
+	/**
+	 * Create the column definition for a array type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeArray(Fluent $column)
+	{
+		return "array ({$column->arrayElements})";
+	}
+
+	/**
+	 * Create the column definition for a object type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
+	 * @return string
+	 */
+	protected function typeObject(Fluent $column)
+	{
+		return "object ".$column->attributes;
 	}
 
 	/**
@@ -446,47 +545,5 @@ class Grammar extends Illuminate\Database\Schema\Grammars\Grammar
 	protected function typeBinary(Fluent $column)
 	{
 		return '';
-	}
-
-	/**
-	 * Get the SQL for an indexOff column modifier.
-	 *
-	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-	 * @param  \Illuminate\Support\Fluent  $column
-	 * @return string|null
-	 */
-	protected function modifyIndexOff(Blueprint $blueprint, Fluent $column)
-	{
-		if ($column->indexOff) return ' INDEX OFF';
-	}
-
-	/**
-	 * Get the SQL for a character set plain index modifier.
-	 *
-	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-	 * @param  \Illuminate\Support\Fluent  $column
-	 * @return string|null
-	 */
-	protected function modifyIndexPlain(Blueprint $blueprint, Fluent $column)
-	{
-		if ( ! is_null($column->indexPlain))
-		{
-			return ' INDEX using plain';
-		}
-	}
-
-	/**
-	 * Get the SQL for a collation column modifier.
-	 *
-	 * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-	 * @param  \Illuminate\Support\Fluent  $column
-	 * @return string|null
-	 */
-	protected function modifyIndexFulltext(Blueprint $blueprint, Fluent $column)
-	{
-		if ( ! is_null($column->fullText))
-		{
-			return ' INDEX using fulltext';
-		}
 	}
 }
