@@ -20,8 +20,8 @@ class CrateServiceProvider extends ServiceProvider
 
 	/**
 	 * Register the service provider
-     *
-     * @return void
+	 *
+	 * @return void
    	 */
 	public function register()
 	{
@@ -29,12 +29,12 @@ class CrateServiceProvider extends ServiceProvider
 		{
 			$db->extend('crate', function($config)
 			{
-					$connector = new Connector();
-					$connection = $connector->connect($config);
+				$connector = new Connector();
+				$connection = $connector->connect($config);
 
-					$database = $config['database'] ?: 'doc';
+				$database = $config['database'] ?: 'doc';
 
-					return new Connection($connection, $database);
+				return new Connection($connection, $database);
 			});
 		});
 	}
