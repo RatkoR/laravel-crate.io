@@ -93,9 +93,8 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	/**
 	 * Returns SQL for named index field.
 	 * 
-	 * All fulltext indexes are created as named index fields, like:
-	 *  first_column string, <-- normal field
-	 * 	INDEX first_column_ft using fulltext (first_column) <-- named index field
+	 * All fulltext indexes are created as named index fields:
+	 *    INDEX first_column_ft using fulltext (first_column)
 	 * 
 	 * @param array $attributes
 	 * @return string
@@ -152,9 +151,9 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 		 * Here we add fulltext indexes. Crate features three index types:
 		 * INDEX OFF, plain and fulltext. 'Off' and 'plain' are added by the
 		 * field definition, fulltext indexes are added here. They can span over
-		 * multiple fields and those cannot be added in the field definitions. So
-		 * we add all fulltext indexes here, even if they are only for single
-		 * field.
+		 * multiple fields and those cannot be added in the field definitions.
+		 * 
+		 * We add all fulltext indexes here - multiple or single field ft indexes.
 		 */
 		$indexes = implode(', ', $this->getIndexes($blueprint));
 		$indexes = $indexes ? ", $indexes" : '';
