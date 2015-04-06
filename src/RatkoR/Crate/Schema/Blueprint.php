@@ -8,11 +8,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	/**
 	 * Array of all fulltext indexes.
 	 * 
-	 * Fulltext indexes are created as named index fields. used if a field
-	 * has fulltext index attached to it as (for example):
+	 * Fulltext indexes are created as named index fields. This
+	 * array is used if a field has fulltext index attached to it 
+	 * as (for example):
 	 *   $table->string('myString')->index('fulltext')
-	 * In this case we store it in $indexes array so that we later create
-	 * named index fields as:
+	 * In this case we store field data in $indexes array so that 
+	 * we later create named index fields as:
 	 *   INDEX ind_myString using fulltext (myString)
 	 */
 	protected $indexes = [];
@@ -84,8 +85,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	}
 
 	/**
-	 * Returns true for fulltext indexes - if options value
-	 * starts with string 'fulltext'.
+	 * Returns true for fulltext indexes.
 	 * 
 	 * This is true if index is created as:
 	 *   $table->string('myString')->index('fulltext') or
@@ -110,15 +110,14 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	{
 		/**
 		 * PLAIN and INDEX OFF are only with column names and are not
-		 * stored into indexes array - we will not be adding them as 
-		 * names index columns.
-		 * Fulltext indexes are generated as named index columns.
+		 * stored into indexes array, only fulltext as they are
+		 * later in the process generated as named index columns.
 		 */
 		if ($this->isFulltextIndex($options)) {
 			$this->indexes[] = ['columns' => $columns, 'options' => $options];
 		}
 
-		return $this->addIndex($columns, $options);
+		return $this;
 	}
 
 	/**
@@ -172,16 +171,17 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	 * Create a new array column on the table.
 	 *
 	 * Array is a special field type for crate.io. In migration
-	 * it is referenced as $table->arrayField('name', 'options'),
+	 * it is referenced as:
+	 *    $table->arrayField('name', 'options')
 	 * where name is field name and options are elements that
 	 * will be in this array. 
 	 * 
 	 * Examples:
 	 *   $table->arrayField('myField1', 'integer');
-	 *   For array of integers
+	 *     For array of integers
 	 * 
 	 *   $table->arrayField('myField2', 'object (dynamic) as (age integer, name string)');
-	 *   For array of objects
+	 *     For array of objects
 	 *
 	 * @param  string  $column
 	 * @param  int  $length
@@ -196,8 +196,11 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 	 * Create a new object column on the table.
 	 *
 	 * Object is a field specific to Crate.io. Can be defined
-	 * as $table->objectField('name', 'options'). Options can be a string
-	 * with all object properties. Like:
+	 * as:
+	 *    $table->objectField('name', 'options')
+	 * Options can be a string with all object properties.
+	 * 
+	 * Example:
 	 *   $table->objectField('f_object', '(dynamic) as (a integer)');
 	 * 
 	 * @param  string  $column
