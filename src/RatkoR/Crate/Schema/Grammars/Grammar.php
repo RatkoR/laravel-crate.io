@@ -91,7 +91,22 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	}
 
 	/**
-	 * Returns SQL for named index field.
+	 * Returns SQL for primary key index field
+	 * 
+	 * @param array $attributes
+	 * @return string
+	 */
+	protected function createPrimaryIndexSql(array $attributes)
+	{
+		$fields = is_array($attributes['columns']) ?
+					implode(',',$attributes['columns']) :
+					$attributes['columns'];
+
+		return "primary key ($fields)";
+	}
+
+	/**
+	 * Returns SQL for fulltext named index field.
 	 * 
 	 * All fulltext indexes are created as named index fields:
 	 *    INDEX first_column_ft using fulltext (first_column)
@@ -99,7 +114,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	 * @param array $attributes
 	 * @return string
 	 */
-	protected function createIndexSql(array $attributes)
+	protected function createFulltextIndexSql(array $attributes)
 	{
 		$indexName = $this->getIndexName($attributes);
 		$analyzer = $this->getFulltextAnalyzer($attributes['options']);
@@ -112,6 +127,25 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 
 		if ($analyzer) {
 			$sql .= " with (analyzer = '{$analyzer}')";
+		}
+
+		return $sql;
+	}
+
+	/**
+	 * Based on index type calls approprite index create functions
+	 */
+	protected function createIndexSql(array $attributes)
+	{
+		$sql = '';
+
+		switch ($attributes['type']) {
+			case 'primary':
+				$sql = $this->createPrimaryIndexSql($attributes);
+				break;
+			case 'fulltext':
+				$sql = $this->createFulltextIndexSql($attributes);
+				break;
 		}
 
 		return $sql;
@@ -189,9 +223,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 	 */
 	public function compilePrimary(Blueprint $blueprint, Fluent $command)
 	{
-		$command->name(null);
-
-		return $this->compileKey($blueprint, $command, 'primary key');
+		return '';
 	}
 
 	/**

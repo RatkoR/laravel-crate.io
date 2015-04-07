@@ -1,6 +1,7 @@
 <?php namespace RatkoR\Crate\Schema;
 
 use RatkoR\Crate\Schema\Blueprint;
+use Closure;
 
 class Builder extends \Illuminate\Database\Schema\Builder
 {
@@ -21,6 +22,26 @@ class Builder extends \Illuminate\Database\Schema\Builder
 		return count($this->connection->select($sql, array($database, $table))) > 0;
 	}
 
+	/**
+	 * Get the column listing for a given table.
+	 *
+	 * @param  string  $table
+	 * @return array
+	 */
+	public function getColumnListing($table)
+	{
+		$sql = $this->grammar->compileColumnExists();
+
+		$database = $this->connection->getDatabaseName();
+
+		$table = $this->connection->getTablePrefix().$table;
+
+		$results = $this->connection->select($sql, array($database, $table));
+
+		return $this->connection->getPostProcessor()->processColumnListing($results);
+	}
+
+	
 	/**
 	 * Create a new command set with a Closure.
 	 *
