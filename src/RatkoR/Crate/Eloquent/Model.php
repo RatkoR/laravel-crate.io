@@ -21,35 +21,21 @@ class Model extends BaseModel
 		return 'U';
 	}
 
-    /**
-     * Get a new query builder instance for the connection.
-     *
-     * @return Builder
-     */
-    protected function newBaseQueryBuilder()
-    {
-        $connection = $this->getConnection();
+	/**
+	 * Get a new query builder instance for the connection.
+	 *
+	 * @return Builder
+	 */
+	protected function newBaseQueryBuilder()
+	{
+		$connection = $this->getConnection();
 
-        // Check the connection type
-        if ($connection instanceof \RatkoR\Crate\Connection)
-        {
+		// Check the connection type
+		if ($connection instanceof \RatkoR\Crate\Connection) {
 			$grammar = $connection->getQueryGrammar();
 			return new QueryBuilder($connection, $grammar, $connection->getPostProcessor());
-        }
+		}
 
-        return parent::newBaseQueryBuilder();
-    }
-
-	public static function truncateX()
-	{
-		$instance = new static;
-		$connection = $instance->getConnection();
-
-		$table = $instance->getTable();
-
-		$sql = "delete from {$table}";
-
-
-dd($table);
+		return parent::newBaseQueryBuilder();
 	}
 }
