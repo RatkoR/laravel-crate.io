@@ -65,7 +65,34 @@ class QueryTest extends TestCase {
 	 * @test
 	 * @expectedException RatkoR\Crate\NotImplementedException
 	 */
-	public function testUnions()
+	public function it_throws_exception_for_whereBetween()
+	{
+		$this->builder->select('*')->from('users')->whereBetween('id',[1,2]);
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
+	public function it_throws_exception_for_whereExists()
+	{
+		$this->builder->select('*')->from('users')->whereExists(function() {});
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
+	public function it_throws_exception_for_selectSub()
+	{
+		$this->builder->select('*')->from('users')->selectSub(function() {},'a');
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
+	public function it_throws_exception_for_joins()
 	{
 		$this->builder->select('*')->from('users')->where('id', '=', 1);
 		$this->builder->union($this->setBuilder()->select('*')->from('users')->where('id', '=', 2));
@@ -113,18 +140,6 @@ class QueryTest extends TestCase {
 		$this->builder->select('*')->from('users')->where('id', '=', 1);
 		$this->assertEquals('select * from users where id = ?', $this->builder->toSql());
 		$this->assertEquals([0 => 1], $this->builder->getBindings());
-	}
-
-	public function testWhereBetweens()
-	{
-		$this->builder->select('*')->from('users')->whereBetween('id', [1, 2]);
-		$this->assertEquals('select * from users where id between ? and ?', $this->builder->toSql());
-		$this->assertEquals([0 => 1, 1 => 2], $this->builder->getBindings());
-
-		$this->builder = $this->setBuilder();
-		$this->builder->select('*')->from('users')->whereNotBetween('id', [1, 2]);
-		$this->assertEquals('select * from users where id not between ? and ?', $this->builder->toSql());
-		$this->assertEquals([0 => 1, 1 => 2], $this->builder->getBindings());
 	}
 
 	public function testBasicOrWheres()

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Query\Builder as BaseBuilder;
 use RatkoR\Crate\NotImplementedException;
+use Closure;
 
 class Builder extends BaseBuilder
 {
@@ -44,6 +45,45 @@ class Builder extends BaseBuilder
 	public function union($query, $all = false)
 	{
 		throw new NotImplementedException('Joins are not implemented in Crate');
+	}
+
+	/**
+	 * Not available in crate.io
+	 *
+	 * @param  string  $column
+	 * @param  array   $values
+	 * @param  string  $boolean
+	 * @param  bool  $not
+	 * @return $this
+	 */
+	public function whereBetween($column, array $values, $boolean = 'and', $not = false)
+	{
+		throw new NotImplementedException('whereBetween is not implemented in Crate');
+	}
+
+	/**
+	 * Not available in Crate.io
+	 *
+	 * @param  \Closure $callback
+	 * @param  string   $boolean
+	 * @param  bool     $not
+	 * @return $this
+	 */
+	public function whereExists(Closure $callback, $boolean = 'and', $not = false)
+	{
+		throw new NotImplementedException('whereExists is not implemented in Crate');
+	}
+
+	/**
+	 * Not implemented in Crate.io
+	 *
+	 * @param  \Closure|\Illuminate\Database\Query\Builder|string $query
+	 * @param  string  $as
+	 * @return \Illuminate\Database\Query\Builder|static
+	 */
+	public function selectSub($query, $as)
+	{
+		throw new NotImplementedException('Subselects are not implemented in Crate');
 	}
 
 }
