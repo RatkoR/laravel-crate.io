@@ -1,6 +1,7 @@
 <?php namespace RatkoR\Crate\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use RatkoR\Crate\Query\Builder as QueryBuilder;
 
 class Model extends BaseModel 
 {
@@ -18,5 +19,37 @@ class Model extends BaseModel
 	protected function getDateFormat()
 	{
 		return 'U';
+	}
+
+    /**
+     * Get a new query builder instance for the connection.
+     *
+     * @return Builder
+     */
+    protected function newBaseQueryBuilder()
+    {
+        $connection = $this->getConnection();
+
+        // Check the connection type
+        if ($connection instanceof \RatkoR\Crate\Connection)
+        {
+			$grammar = $connection->getQueryGrammar();
+			return new QueryBuilder($connection, $grammar, $connection->getPostProcessor());
+        }
+
+        return parent::newBaseQueryBuilder();
+    }
+
+	public static function truncateX()
+	{
+		$instance = new static;
+		$connection = $instance->getConnection();
+
+		$table = $instance->getTable();
+
+		$sql = "delete from {$table}";
+
+
+dd($table);
 	}
 }

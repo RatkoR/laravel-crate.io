@@ -18,11 +18,17 @@
     },
     "require-dev": {
         "mockery/mockery": "*",
-        "phpspec/phpspec": "~2.0"
+        "phpunit/phpunit": "4.6.*",
+        "orchestra/testbench": "3.0.*"
     },
     "autoload": {
         "psr-0": {
             "RatkoR\\Crate": "src/"
         }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
     }
 }

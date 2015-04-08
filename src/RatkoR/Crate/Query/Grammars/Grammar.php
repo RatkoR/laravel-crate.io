@@ -23,7 +23,7 @@ class Grammar extends \Illuminate\Database\Query\Grammars\Grammar {
 	public function compileTruncate(Builder $query)
 	{
 		$table = $this->wrapTable($query->from);
-		return trim("delete from $table");
+		return array('delete from '.$this->wrapTable($query->from) => array());
 	}
 
 	/**

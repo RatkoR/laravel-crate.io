@@ -57,7 +57,9 @@ class Connector extends BaseConnector implements ConnectorInterface {
 	 */
 	protected function getDsn(array $config)
 	{
-		extract($config);
+		$host = isset($config['host']) ? $config['host'] : 'localhost';
+		$port = isset($config['port']) ? $config['port'] : 4200;
+
 		return "crate:{$host}:{$port}";
 	}
 
