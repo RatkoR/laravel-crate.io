@@ -71,7 +71,7 @@ Next, change default database connection to `"crate"`.
 'default' => 'mongodb',
 ```
 
-Lastly, *and don't forget it*, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
+Lastly, **and don't forget it**, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
 default laravel FETCH_CLASS style:
 
 ```php
@@ -91,7 +91,7 @@ you'll get Exception from Crate DB.
 Big things that are **not** supported are:  
 + joins
 + subselects
-+ auto increments - you'll have to manage those by yourself
++ [auto increments](https://crate.io/docs/stable/sql/ddl.html#constraints) - you'll have to manage those by yourself
 + whereBetween(s)
 + unique indexes
 + foreign keys (and relations)
@@ -201,7 +201,8 @@ or just leave it out, crate will index it.
 Schema::drop('article');
 ```
 
-**To add an object field use:**
+**To add an 'object' field use:**  
+
 ```php
 $table->objectField('field_name', 'object parameters');
 ```
@@ -213,7 +214,8 @@ $table->objectField('my_object_1','as (f_date timestamp)');
 $table->objectField('my_object_2','as (object(dynamic) as (name string, birthday timestamp)');
 ```
 
-**Add an array field:**
+**Add an 'array' field:**  
+
 Arrays are added with `->arrayField('name', 'array parameters')`. As is with
 `object` type, `array paramters` can have any property that crate allows
 for arrays. See their [documentation](https://crate.io/docs/stable/sql/data_types.html#array).
