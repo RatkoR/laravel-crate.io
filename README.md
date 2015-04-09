@@ -138,7 +138,7 @@ An example of schema in migration file would be:
 			$table->mediumText('summary');
 			$table->text('internal_Comment')->index('off');
 			$table->text('body')->index('fulltext:english');
-			$table->long('nb_views');
+			$table->bigInteger('nb_views');
 			$table->timestamp('published_on');
 
 			$table->arrayField('images','object as (id integer, title string');
@@ -311,6 +311,15 @@ $article = Article::select('id','name')->where('id',1)->first();
 #####Using count:  
 ```php
 $nb = Article::where('views','>',100)->count();
+```
+
+#####Compldex where(s):  
+```php
+$articles = Article::where('id','=',3)->orWhere(function($query)
+			{
+				$query->where('title', 'Star Wars 7')
+					  ->orWhere('title', 'none');
+			})->get();
 ```
 
 *etc...*  
