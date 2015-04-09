@@ -349,3 +349,40 @@ $article->save();
 $article = Article::find(1);
 $article->delete();
 ```
+
+###Tests
+
+There are two kinds of tests:  
++ Lexical tests
++ Data tests
+
+
+###Lexical tests
+
+Lexical tests check if SQL statements produced
+by Query builder are semantically correct.
+
+These tests are executed relatively fast. They check that all common
+SQLs are unaffected by code changes.
+
+###Data tests
+
+Data tests connect to real Crate.io server and try to manage data there.
+Selecting, inserting, updating, deleting queries, all are tested.  
+
+These tests take longer to finish. We found that queriying for a record immediatelly
+after it has been inserted can produce negative results. Crate
+needs some time between insert (or delete, or update) requests and
+all next selects that query for this changes. So we have couple of
+`sleep(1)` statements in test code.
+
+Running data tests for the first time will probably fail as `migration`
+table will not exist yet. Try rerunning test and it will proceed ok.
+
+Conenction properties for tests are in `tests/DataTests/Config/database.php`
+file and can be changed for your setup.  
+
+Data tests will create:  
++ `t_migration` table for test table migrations, 
++ `t_users` table for some dummy user data.
+
