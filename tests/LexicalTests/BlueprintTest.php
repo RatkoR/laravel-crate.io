@@ -218,7 +218,6 @@ class BlueprintTest extends TestCase {
 
 	/**
 	 * @test
-	 * @expectedExceptionX RatkoR\Crate\NotImplementedException
 	 */
 	function it_adds_single_primary_index()
 	{
@@ -236,7 +235,6 @@ class BlueprintTest extends TestCase {
 
 	/**
 	 * @test
-	 * @expectedExceptionX RatkoR\Crate\NotImplementedException
 	 */
 	function it_adds_double_primary_index()
 	{
