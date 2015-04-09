@@ -11,7 +11,7 @@ for more info.
 
 Crate.io published a [PDO](https://github.com/crate/crate-pdo) and
 [DBAL](https://github.com/crate/crate-dbal) driver for easy access to
-the crate DB server.  
+the crate DB server.
 Laravel-crate.io project uses those adapters when connecting to Crate DB.  
 
 ###Project status
@@ -20,7 +20,7 @@ Laravel-crate.io is used in our internal projects. We did a bunch of
 unit tests and the driver seems ok.  
 
 Still, it's still early in development, so **if you find any bugs, please
-open a ticket in issues here**.
+open an issue ticket**.
 
 ###Installation
 
@@ -34,7 +34,7 @@ Add a require to your composer.json  :
 }
 ```
 
-and run `composer update`
+and run `composer update`.
 
 After composer downloads your package, you'll have to register this new Crate
 DB provider in Laravel. Open `config/app.php` and add:
@@ -45,15 +45,14 @@ DB provider in Laravel. Open `config/app.php` and add:
 
 to the list of `providers`.
 
-####Crate.io server
-
 You'll have to install crate.io server, of course. See installation
 instructions on their site.
+
 
 ###Configuration
 
 Open `config/database.php` and add new crate database connection (with
-config values used in your crate setup):
+config values to match your setup):
 
 ```php
 'crate' => array(
@@ -64,13 +63,13 @@ config values used in your crate setup):
 ),
 ```
 
-Next, change default database connection to `crate`.
+Next, change default database connection to `"crate"`.
 
 ```php
 'default' => 'mongodb',
 ```
 
-Lastly, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
+Lastly, *and don't forget it*, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
 default laravel FETCH_CLASS style:
 
 ```php
@@ -80,19 +79,18 @@ default laravel FETCH_CLASS style:
 
 ###What works and what doesn't
 
-Crate.io supports many of the SQL statements, but not all of them. Many that
-you're accustomed to might be missing, so be sure to take a look at their site
-if you're in doubt.
+Crate.io supports many of the SQL statements, but not all of them. Be sure to 
+take a look at their [site](https://crate.io/docs/stable/sql/index.html) if you're in doubt.
 
-We're throwing an `NotImplementedException` for those statements that you
+We're throwing an `RatkoR\Crate\NotImplementedException` for those statements that you
 might wrongly try to use. We tried to cover all of them, but if we missed any
 you'll get Exception from Crate DB.
 
 Big things that are **not** supported are:  
 + joins
 + subselects
-+ auto increments
-+ whereBetween
++ auto increments - you'll have to manage those by yourself
++ whereBetween(s)
 + unique indexes
 + foreign keys (and relations)
 + dropping, renaming columns (adding fields works)
@@ -105,13 +103,13 @@ Crate specific stuff that was added is:
 + fulltext indexes over single or multiple fields w/o analyzers
 
 
-`Article::truncate()` has been changed to silently use `delete from article`;
+Also, `Article::truncate()` has been changed to silently use `delete from article`;
 
 
 ###Schema support
 
 Migration and schema are supported. You can use `artisan migrate` commands
-to create or drop tables from crate.
+to create or drop tables.
 
 Crate has only a subset of [field types](https://crate.io/docs/stable/sql/data_types.html)
 (and some new ones), so choose appropriate.
@@ -125,10 +123,10 @@ Crate types:
 + object
 + array
 
-Some SQL types are linked to crate types. For example, `bigInteger` is
-linked to `long`, text is linked to `string`, `enum` to `string` also and so on.
+Some SQL types are silently linked to crate types. For example, `bigInteger` is
+linked to `long`, `text, mediumtext, longtext, enum` are linked to `string`, ...
 
-An example of schema would be:  
+An example of schema in migration file would be:  
 ```php
 		Schema::create('article', function(Blueprint $table)
 		{
@@ -150,7 +148,9 @@ An example of schema would be:
 		});
 ```
 
-Fulltext index on a single field can be added as:  
+####Description of some SQL/Crate schema differences
+
+**Fulltext index on a single field can be added as:**  
 ```php
 $table->index('field1','fulltext');
 ```
@@ -159,32 +159,32 @@ or
 $table->string('field1')->index('fulltext');
 ```
 
-Fulltext index on multiple fields:  
+**Fulltext index on multiple fields:**  
 ```php
 $table->index(['field1','field2'],'fulltext');
 ```
 
-Fulltext index with english analyzer on multiple fields:  
+**Fulltext index with english analyzer on multiple fields:**  
 ```php
 $table->index(['field1','field2'],'fulltext:english');
 ```
 
-Primary key on single field:  
+**Primary key on single field:**  
 ```php
 $table->primary('field1');
 ```
 
-Primary key on multiple fields:  
+**Primary key on multiple fields:**  
 ```php
 $table->primary(['f_id','f2_id']);
 ```
 
-To not include a field in default index, use `->index('off')`:  
+**To not include a field in default index**
 ```php
 $table->string('not_important_field')->index('off');
 ```
 
-A PLAIN index (the default index) can be added as `->index('plain')`:  
+**A PLAIN index (the default index)**
 ```php
 $table->string('field')->index('plain');
 ```
@@ -194,12 +194,12 @@ $table->string('field')->index();
 ```
 or just leave it out, crate will index it.
 
-To drop a table in migration scripts:
+**To drop a table in migration scripts:**
 ```php
 Schema::drop('article');
 ```
 
-To add an object field use:
+**To add an object field use:**
 ```php
 $table->objectField('field_name', 'object parameters');
 ```
@@ -211,6 +211,7 @@ $table->objectField('my_object_1','as (f_date timestamp)');
 $table->objectField('my_object_2','as (object(dynamic) as (name string, birthday timestamp)');
 ```
 
+**Add an array field:**
 Arrays are added with `->arrayField('name', 'array parameters')`. As is with
 `object` type, `array paramters` can have any property that crate allows
 for arrays. See their [documentation](https://crate.io/docs/stable/sql/data_types.html#array).
@@ -223,7 +224,7 @@ $table->arrayField('f_array','object as (age integer, name string');
 ###Basic usage
 
 With crate DB connection, you can do simple and even more complex queries.
-Some examples are written below:  
+Some examples are:  
 
 ```php
 $articles = DB::select('select * from article where id = ?', array(1));  
@@ -236,7 +237,7 @@ $users = DB::table('user')->get();
 
 ###Eloquent
 
-To use Eloquent with Crate.io, you'll need to use Crate Eloquent model.
+To use Eloquent you'll need to use Crate Eloquent model.
 
 ```php
 use RatkoR\Crate\Eloquent\Model AS Eloquent;
@@ -307,6 +308,9 @@ $article = Article::select('id','name')->where('id',1)->first();
 ```php
 $nb = Article::where('views','>',100)->count();
 ```
+
+*etc...*  
+
 
 #####Inserting
 ```php
