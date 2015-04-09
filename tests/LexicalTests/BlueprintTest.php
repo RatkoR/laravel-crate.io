@@ -34,7 +34,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_adds_plain_index_data_to_column_if_index_is_not_specified()
 	{
-		$blueprint = new Blueprint('TestTable', function($table) {
+		$blueprint = new Blueprint('testtable', function($table) {
 			$table->string('f_string')->index();
 		});
 
@@ -46,7 +46,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_adds_plain_index_data_to_column()
 	{
-		$blueprint = new Blueprint('TestTable', function($table) {
+		$blueprint = new Blueprint('testtable', function($table) {
 			$table->string('f_string')->index('plain');
 		});
 
@@ -58,7 +58,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_adds_off_index_data_to_column()
 	{
-		$blueprint = new Blueprint('TestTable', function($table) {
+		$blueprint = new Blueprint('testtable', function($table) {
 			$table->string('f_string')->index('off');
 		});
 
@@ -70,7 +70,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_does_not_add_fulltext_index_data_to_column()
 	{
-		$blueprint = new Blueprint('TestTable', function($table) {
+		$blueprint = new Blueprint('testtable', function($table) {
 			$table->string('f_string')->index('fulltext');
 		});
 
@@ -82,7 +82,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_adds_fulltext_index_wo_analyzer_data_to_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();	
 		$blueprint->string('f_string');
@@ -95,9 +95,25 @@ class BlueprintTest extends TestCase {
 	}
 
 	/** @test */
+	function it_adds_double_fulltext_index_wo_analyzer_data_to_table()
+	{
+		$blueprint = new Blueprint('testtable');
+
+		$blueprint->create();	
+		$blueprint->string('f_string_1');
+		$blueprint->string('f_string_2');
+		$blueprint->index(['f_string_1','f_string_2'],'fulltext');
+
+		$def = $blueprint->toSql($this->connection, $this->grammar);
+
+		$this->assertContains(", INDEX ind_f_string_1_f_string_2 using fulltext(f_string_1,f_string_2)", $def[0]);
+		$this->assertNotContains("analyzer", $def[0]);
+	}
+
+	/** @test */
 	function it_adds_fulltext_index_with_analyzer_data_to_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();	
 		$blueprint->string('f_string');
@@ -111,7 +127,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_does_not_add_plain_index_as_named_index_to_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();	
 		$blueprint->string('f_string');
@@ -125,7 +141,7 @@ class BlueprintTest extends TestCase {
 	/** @test */
 	function it_does_not_add_off_index_as_named_index_to_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();	
 		$blueprint->string('f_string');
@@ -142,7 +158,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_drop_index()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$return = $blueprint->dropIndex();	
 	}
 
@@ -152,7 +168,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_binary_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->binary('f_binary');
 	}
 
@@ -162,7 +178,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_dropPrimary()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->dropPrimary();
 	}
 
@@ -172,7 +188,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_dropUnique()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->dropUnique('index1');
 	}
 
@@ -182,7 +198,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_dropIndex()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->dropIndex('index1');
 	}
 
@@ -192,7 +208,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_dropForeign()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->dropForeign('index1');
 	}
 
@@ -202,7 +218,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_foreign_index()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->foreign('index1');
 	}
 
@@ -212,7 +228,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_unique_index()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->unique('index1');
 	}
 
@@ -221,7 +237,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_adds_single_primary_index()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->integer('f_id');
@@ -238,7 +254,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_adds_double_primary_index()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->integer('f_id');
@@ -256,7 +272,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_does_not_add_unique_index_on_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->integer('f_id')->unique();
@@ -272,7 +288,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_dropColumn()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->dropColumn('f_string');
 	}
 
@@ -282,7 +298,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_renameColumn()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 		$blueprint->renameColumn('f_string','t_to');
 	}
 
@@ -292,7 +308,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_throws_exception_for_changing_column()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->string('f_string', 50)->change();
 		$def = $blueprint->toSql($this->connection, $this->grammar);
@@ -303,7 +319,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_two_fields()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->integer('f_id');
@@ -311,7 +327,7 @@ class BlueprintTest extends TestCase {
 
 		$def = $blueprint->toSql($this->connection, $this->grammar);
 
-		$this->assertContains("create table \"TestTable\" (\"f_id\" integer, \"f_string\" string )", $def[0]);
+		$this->assertContains("create table \"testtable\" (\"f_id\" integer, \"f_string\" string )", $def[0]);
 	}
 
 	/**
@@ -319,12 +335,12 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_drops_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->drop();
 		$def = $blueprint->toSql($this->connection, $this->grammar);
 
-		$this->assertContains("drop table \"TestTable\"", $def[0]);
+		$this->assertContains("drop table \"testtable\"", $def[0]);
 	}
 
 	/**
@@ -332,7 +348,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_object_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->objectField('f_object');
@@ -347,7 +363,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_dynamic_object_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->objectField('f_object','dynamic');
@@ -362,7 +378,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_strict_object_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->objectField('f_object','strict');
@@ -377,7 +393,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_object_field_with_subfields()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->objectField('f_object','as (f_date timestamp)');
@@ -392,7 +408,7 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_creates_table_with_array_field()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->create();
 		$blueprint->arrayField('f_array','object as (age integer, name string');
@@ -407,12 +423,12 @@ class BlueprintTest extends TestCase {
 	 */
 	function it_adds_a_new_integer_field_to_table()
 	{
-		$blueprint = new Blueprint('TestTable');
+		$blueprint = new Blueprint('testtable');
 
 		$blueprint->integer('f_integer');
 
 		$def = $blueprint->toSql($this->connection, $this->grammar);
 
-		$this->assertContains("alter table \"TestTable\" add \"f_integer\" integer", $def[0]);
+		$this->assertContains("alter table \"testtable\" add \"f_integer\" integer", $def[0]);
 	}
 }
