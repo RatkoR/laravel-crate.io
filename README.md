@@ -107,6 +107,8 @@ Crate specific stuff that was added is:
 
 Also, `Article::truncate()` has been changed to silently use `delete from article`;
 
+Note, that Crate.io does not support uppercase letters in table or schema names.
+See this and other restrictions [here](https://crate.io/docs/stable/sql/ddl.html#naming-restrictions).
 
 ###Schema support
 
