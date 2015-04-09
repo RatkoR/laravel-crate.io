@@ -17,7 +17,9 @@ Laravel-crate.io project uses those adapters when connecting to Crate DB.
 ###Project status
 
 Laravel-crate.io is used in our internal projects. We did a bunch of
-unit tests and the driver seems ok.  
+unit tests and the driver seems ok. We use id as a caching layer in front
+of our DB servers. Crate is insanely fast (Elasticsearch) and offloads our
+DB servers a lot.  
 
 Still, it's still early in development, so **if you find any bugs, please
 open an issue ticket**.
