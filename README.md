@@ -315,7 +315,7 @@ $article = Article::select('id','name')->where('id',1)->first();
 $nb = Article::where('views','>',100)->count();
 ```
 
-#####Compldex where(s):  
+#####Complex where(s):  
 ```php
 $articles = Article::where('id','=',3)->orWhere(function($query)
 			{
