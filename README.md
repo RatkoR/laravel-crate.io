@@ -273,6 +273,7 @@ to all your eloquent classes, you can add an alias to `alias` array in `config/a
 
 This will allow you to shorten the class definition to:
 ```php
+use CrateEloquent;
 class Article extends CrateEloquent {}
 ```
 
@@ -280,7 +281,7 @@ class Article extends CrateEloquent {}
 
 It can be used mostly the same as an original Laravel eloquent model. 
 
-#####Getting all users:  
+#####Getting all articles:  
 ```php
 $articles = Article::all();
 ```
