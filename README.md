@@ -68,7 +68,7 @@ config values to match your setup):
 Next, change default database connection to `"crate"`.
 
 ```php
-'default' => 'mongodb',
+'default' => 'crate',
 ```
 
 Lastly, **and don't forget it**, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
