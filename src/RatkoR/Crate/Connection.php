@@ -8,6 +8,23 @@ use RatkoR\Crate\Schema\Grammars\Grammar as SchemaGrammar;
 class Connection extends \Illuminate\Database\Connection
 {
 	/**
+	 * Set the default fetch mode for the connection.
+	 * 
+	 * NOTE! Crate cannot use PDO::FETCH_CLASS fetch mode, so
+	 * 	we silently  change it to PDO::FETCH_ASSOC
+	 *
+	 * @param  int  $fetchMode
+	 * @return int
+	 */
+	public function setFetchMode($fetchMode)
+	{
+		if ($fetchMode === \PDO::FETCH_CLASS)
+			$fetchMode = \PDO::FETCH_ASSOC;
+
+		parent::setFetchMode($fetchMode);
+	}
+
+	/**
 	 * Get a schema builder instance for the connection.
 	 *
 	 * @return \Illuminate\Database\Schema\MySqlBuilder

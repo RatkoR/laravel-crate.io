@@ -71,12 +71,12 @@ Next, change default database connection to `"crate"`.
 'default' => 'crate',
 ```
 
-Lastly, **and don't forget it**, change `fetch` PDO style to `FETCH_ASSOC` as crate does not suuport
-default laravel FETCH_CLASS style:
+**Note on PDO::FETCH_CLASS**  
 
-```php
-'fetch' => PDO::FETCH_ASSOC,
-```
+Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
+This happens only for Crate connections, zour normal MySQL connections will still use FETCH_CLASS.
+
+See more about fetch types on their [github](https://github.com/crate/crate-pdo).
 
 
 ###What works and what doesn't
