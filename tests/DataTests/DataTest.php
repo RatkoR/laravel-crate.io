@@ -5,6 +5,7 @@ use DataTests\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use StdClass;
 
 class DataTest extends TestCase {
 
@@ -29,10 +30,16 @@ class DataTest extends TestCase {
 	/** @test */
 	public function it_adds_a_new_user()
 	{
+		$class = new stdClass();
+		$class->param1 = 1;
+		$class->param2 = "two";
+		
 		$user = User::create([
 			'id' => 1,
 			'name' => 'User 1',
-			'email' => 'user1@example.com'
+			'email' => 'user1@example.com',
+			'f_array' => ['one','two','three','four'],
+			'f_object' => $class,
 		]);
 		sleep(1);
 
@@ -42,6 +49,12 @@ class DataTest extends TestCase {
 		$this->assertEquals('User 1', $user->name);
 		$this->assertEquals(1, User::count());
 		$this->assertInstanceOf('Carbon\Carbon', $user->created_at);
+		$this->assertEquals(true, is_array($user->f_array));
+		$this->assertEquals('one', $user->f_array[0]);
+		$this->assertEquals(4, count($user->f_array));
+		$this->assertEquals(true, is_object($user->f_object));
+		$this->assertEquals(1, $user->f_object->param1);
+		$this->assertEquals('two', $user->f_object->param2);
 	}
 
 	/** @test */
