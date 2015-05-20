@@ -71,6 +71,54 @@ Next, change default database connection to `"crate"`.
 'default' => 'crate',
 ```
 
+####Configuration for multiple hosts
+
+This driver can handle conenctions to multiple crate hosts. To use them, write
+`host` config parameter as a comma delimited list of hosts. Like:
+
+```php
+'crate' => array(
+    'driver'   => 'crate',
+    'host'     => 'localhost,10.0.0.1,10.0.0.2',
+    'database' => 'doc',
+    'port'     => 4200,
+),
+```
+
+The DSN created in this case looks like:
+```
+'crate:localhost:4200,10.0.0.1:4200,10.0.0.2:4200'
+```
+
+If you need to specify different ports, add them to the `host` param like:
+
+```php
+    'host'     => 'localhost:4201,10.0.0.1:4300,10.0.0.2',
+```
+
+which will create a DSN like:
+```
+'crate:localhost:4201,10.0.0.1:4300,10.0.0.2:4200'
+```
+
+**Randomization**
+
+`crate-pdo` takes [the first host](https://github.com/crate/crate-pdo/blob/master/src/Crate/PDO/PDO.php#L87)
+from list of hosts. To overcome this we randomize all hosts
+so that connections to multiple crate servers are distributed. If you don't want
+randomization, add a `randomHosts` parameter and set it to `false`:
+
+```php
+'crate' => array(
+    'driver'   => 'crate',
+    'host'     => 'localhost,10.0.0.1,10.0.0.2',
+    'database' => 'doc',
+    'port'     => 4200,
+    'randomHosts' => false,
+),
+```
+
+
 **Note on PDO::FETCH_CLASS**  
 
 Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
