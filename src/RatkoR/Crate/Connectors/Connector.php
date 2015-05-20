@@ -52,15 +52,65 @@ class Connector extends BaseConnector implements ConnectorInterface {
 	 * Crate dsn looks like:
 	 *   crate:<HOSTNAME_OR_IP>:<PORT> (eg: crate:localhost:4200)
 	 *
+	 * PDO can also work with multiple servers (eg: crate:localhost:4200,10.1.1.2:3200).
+	 * 
+	 * If user provides comma delimited list of hosts, we create
+	 * multiple host servers.
+	 * 
 	 * @param  array   $config
 	 * @return string
 	 */
 	protected function getDsn(array $config)
 	{
 		$host = isset($config['host']) ? $config['host'] : 'localhost';
-		$port = isset($config['port']) ? $config['port'] : 4200;
+		$port = isset($config['port']) ? (int)$config['port'] : 4200;
+		$randomHosts = isset($config['randomHosts']) ? $config['randomHosts'] : true;
+
+		if (strpos($host,",") !== false)
+			return $this->getMultipleHostsDsn($host, $port, $randomHosts);
 
 		return "crate:{$host}:{$port}";
 	}
 
+	/**
+	 * Returns DSN for connection to multiple hosts.
+	 * 
+	 * If randomHosts config param is set to true (whic is the default),
+	 * we also randomize hosts so that connections are distributed among them.
+	 * 
+	 * @param  string   $hostList Comma delimited list of crate hosts
+	 * @param  int   $defaultPort Default port as stated in config['port'] (or 4200)
+	 * @return string dsn string
+	 */
+	protected function getMultipleHostsDsn($hostList, $defaultPort, $randomize)
+	{
+		$hosts = explode(',',$hostList);
+		
+		foreach ($hosts AS $key => $host) {
+			$hosts[$key] = $this->addPortToHost($host, $defaultPort);
+		}
+		
+		if ($randomize) {
+			shuffle($hosts);
+		}
+		
+		return 'crate:'.implode(',',$hosts);
+	}
+	
+	/**
+	 * Returns host:port pair.
+	 * If port is not set, host is linked with default port.
+	 * 
+	 * @param  string   $host IP or DNS name of crate server
+	 * @param  int   $defaultPort Default port as stated in config['port'] (or 4200)
+	 * @return string
+	 */
+	protected function addPortToHost($host, $defaultPort)
+	{
+		if (strpos($host,':') !== false) {
+			return $host;
+		}
+		
+		return $host.':'.$defaultPort;
+	}
 }
