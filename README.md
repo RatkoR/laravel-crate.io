@@ -122,7 +122,7 @@ randomization, add a `randomHosts` parameter and set it to `false`:
 **Note on PDO::FETCH_CLASS**  
 
 Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
-This happens only for Crate connections, zour normal MySQL connections will still use FETCH_CLASS.
+This happens only for Crate connections, your normal MySQL connections will still use FETCH_CLASS.
 
 See more about fetch types on their [github](https://github.com/crate/crate-pdo).
 
@@ -145,6 +145,7 @@ Big things that are **not** supported are:
 + foreign keys (and relations)
 + dropping, renaming columns (adding fields works)
 + blobs (crate supports it, but we didn't implement it yet)
++ naming columns like _id, _version, _score (those are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html))
 
 Crate specific stuff that was added is:
 + object type

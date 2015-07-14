@@ -286,6 +286,51 @@ class BlueprintTest extends TestCase {
 	 * @test
 	 * @expectedException RatkoR\Crate\NotImplementedException
 	 */
+	function it_throws_exception_for_underscore_id_field()
+	{
+		$blueprint = new Blueprint('testtable');
+
+		$blueprint->create();
+		$blueprint->integer('f_id');
+		$blueprint->integer('_id');
+
+		$def = $blueprint->toSql($this->connection, $this->grammar);
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
+	function it_throws_exception_for_underscore_score_field()
+	{
+		$blueprint = new Blueprint('testtable');
+
+		$blueprint->create();
+		$blueprint->integer('_score');
+		$blueprint->string('name');
+
+		$def = $blueprint->toSql($this->connection, $this->grammar);
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
+	function it_throws_exception_for_underscore_version_field()
+	{
+		$blueprint = new Blueprint('testtable');
+
+		$blueprint->create();
+		$blueprint->integer('nbItems');
+		$blueprint->string('_version');
+
+		$def = $blueprint->toSql($this->connection, $this->grammar);
+	}
+
+	/**
+	 * @test
+	 * @expectedException RatkoR\Crate\NotImplementedException
+	 */
 	function it_throws_exception_for_dropColumn()
 	{
 		$blueprint = new Blueprint('testtable');
