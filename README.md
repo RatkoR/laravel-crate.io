@@ -1,11 +1,11 @@
 ## Crate.io driver for Laravel 5
 
-This is an Eloquent and Query builder support for Crate.io. Extends 
+This is an Eloquent and Query builder support for Crate.io. Extends
 the original Laravel API with Crate PDO driver.
 
 ###Crate and Crate PDO
 
-Crate is a distributed SQL Database based on Elasticsearch, Lucene 
+Crate is a distributed SQL Database based on Elasticsearch, Lucene
 and other goodies. See their official page on [Crate.io](https://crate.io)
 for more info.  
 
@@ -129,7 +129,7 @@ See more about fetch types on their [github](https://github.com/crate/crate-pdo)
 
 ###What works and what doesn't
 
-Crate.io supports many of the SQL statements, but not all of them. Be sure to 
+Crate.io supports many of the SQL statements, but not all of them. Be sure to
 take a look at their [site](https://crate.io/docs/stable/sql/index.html) if you're in doubt.
 
 We're throwing an `RatkoR\Crate\NotImplementedException` for those statements that you
@@ -144,8 +144,7 @@ Big things that are **not** supported are:
 + unique indexes
 + foreign keys (and relations)
 + dropping, renaming columns (adding fields works)
-+ blobs (crate supports it, but we didn't implement it yet)
-+ naming columns like _id, _version, _score (those are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html))
++ naming columns like _ id, _ version, _ score - these are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html)
 
 Crate specific stuff that was added is:
 + object type
@@ -181,25 +180,45 @@ linked to `long`, `text, mediumtext, longtext, enum` are linked to `string`, ...
 
 An example of schema in migration file would be:  
 ```php
-		Schema::create('article', function(Blueprint $table)
-		{
-			$table->integer('id');
+        Schema::create('article', function(Blueprint $table)
+        {
+            $table->integer('id');
 
-			$table->string('title')->index('plain');
-			$table->mediumText('summary');
-			$table->text('internal_Comment')->index('off');
-			$table->text('body')->index('fulltext:english');
-			$table->bigInteger('nb_views');
-			$table->timestamp('published_on');
+            $table->string('title')->index('plain');
+            $table->mediumText('summary');
+            $table->text('internal_Comment')->index('off');
+            $table->text('body')->index('fulltext:english');
+            $table->bigInteger('nb_views');
+            $table->timestamp('published_on');
 
-			$table->arrayField('images','object as (id integer, title string');
-			$table->objectField('author','(dynamic) as (id integer, name string)');
+            $table->arrayField('images','object as (id integer, title string');
+            $table->objectField('author','(dynamic) as (id integer, name string)');
 
-			$table->timestamps();
+            $table->timestamps();
 
-			$table->primary('id');
-		});
+            $table->primary('id');
+        });
 ```
+
+####Blob tables
+
+Creating (and dropping) blob tables is also supported. Blob tables don't have arbitrary
+colums, just digest and last_moified. And even these are created automatically.
+
+An example of create blob schema is:
+```php
+        Schema::createBlob('myblob');
+```
+
+*There is no need for the callback parameter (the second parameter in createBlob() which
+defines fields). If you pass it it will be silently ignored.*
+
+To drop a table in schema do:
+
+```php
+    Schema::dropBlob('myblob');
+```
+
 
 ####Description of some SQL/Crate schema differences
 
@@ -328,7 +347,7 @@ class Article extends CrateEloquent {}
 
 ####Eloquent usage
 
-It can be used mostly the same as an original Laravel eloquent model. 
+It can be used mostly the same as an original Laravel eloquent model.
 
 #####Getting all articles:  
 ```php
@@ -368,10 +387,10 @@ $nb = Article::where('views','>',100)->count();
 #####Complex where(s):  
 ```php
 $articles = Article::where('id','=',3)->orWhere(function($query)
-			{
-				$query->where('title', 'Star Wars 7')
-					  ->orWhere('title', 'none');
-			})->get();
+            {
+                $query->where('title', 'Star Wars 7')
+                      ->orWhere('title', 'none');
+            })->get();
 ```
 
 *etc...*  
@@ -380,9 +399,9 @@ $articles = Article::where('id','=',3)->orWhere(function($query)
 #####Inserting
 ```php
 $new = Article::create([
-	'id' => 1, // don't forget, there is no auto increment
-	'title' => 'John Doe and friends',
-	'summary' => '...'
+    'id' => 1, // don't forget, there is no auto increment
+    'title' => 'John Doe and friends',
+    'summary' => '...'
 ]);
 ```
 
@@ -433,6 +452,5 @@ Conenction properties for tests are in `tests/DataTests/Config/database.php`
 file and can be changed for your setup.  
 
 Data tests will create:  
-+ `t_migration` table for test table migrations, 
++ `t_migration` table for test table migrations,
 + `t_users` table for some dummy user data.
-
