@@ -60,4 +60,35 @@ class Builder extends \Illuminate\Database\Schema\Builder
 
         return new Blueprint($table, $callback);
     }
+
+    /**
+     * Create a new blob table on the schema.
+     *
+     * @param  string    $table
+     * @param  \Closure  $callback
+     * @return \Illuminate\Database\Schema\Blueprint
+     */
+    public function createBlob($table, Closure $callback)
+    {
+        $blueprint = $this->createBlueprint($table);
+
+        $blueprint->createBlob();
+
+        $this->build($blueprint);
+    }
+
+    /**
+     * Drop a blob table from the schema.
+     *
+     * @param  string  $table
+     * @return \Illuminate\Database\Schema\Blueprint
+     */
+    public function dropBlob($table)
+    {
+        $blueprint = $this->createBlueprint($table);
+
+        $blueprint->dropBlob();
+
+        $this->build($blueprint);
+    }
 }
