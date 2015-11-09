@@ -478,4 +478,32 @@ class BlueprintTest extends TestCase {
 
         $this->assertContains("alter table \"testtable\" add \"f_integer\" integer", $def[0]);
     }
+
+    /**
+     * @test
+     */
+    function it_creates_a_blob_table()
+    {
+        $blueprint = new Blueprint('testtable');
+
+        $blueprint->createBlob();
+
+        $def = $blueprint->toSql($this->connection, $this->grammar);
+
+        $this->assertContains("create blob table", $def[0]);
+    }
+
+    /**
+     * @test
+     */
+    function it_drops_a_blob_table()
+    {
+        $blueprint = new Blueprint('testtable');
+
+        $blueprint->dropBlob();
+
+        $def = $blueprint->toSql($this->connection, $this->grammar);
+
+        $this->assertContains("drop blob table", $def[0]);
+    }
 }

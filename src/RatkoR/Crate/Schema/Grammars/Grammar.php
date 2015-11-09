@@ -199,6 +199,38 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
         return $sql;
     }
 
+    /**
+     * Compile a create blob table command.
+     * Blob table does not have any fields in definitions. Just table name.
+     *
+     * create blob table myblobs;
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return string
+     */
+    public function compileCreateBlob(Blueprint $blueprint, Fluent $command, Connection $connection)
+    {
+        $sql = 'create blob table '.$this->wrapTable($blueprint)."";
+
+        return $sql;
+    }
+
+    /**
+     * Compile a drop blob table command.
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return string
+     */
+    public function compileDropBlob(Blueprint $blueprint, Fluent $command, Connection $connection)
+    {
+        $sql = 'drop blob table '.$this->wrapTable($blueprint)."";
+
+        return $sql;
+    }
 
     /**
      * Compile an add column command.

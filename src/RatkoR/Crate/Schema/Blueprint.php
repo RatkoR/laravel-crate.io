@@ -326,4 +326,24 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 
         return parent::addColumn($type, $name, $parameters);
     }
+
+    /**
+     * Indicate that the blob table needs to be created.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function createBlob()
+    {
+        return $this->addCommand('createBlob');
+    }
+
+    /**
+     * Indicate that the blob table should be dropped.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function dropBlob()
+    {
+        return $this->addCommand('dropBlob');
+    }
 }
