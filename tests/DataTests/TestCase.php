@@ -1,4 +1,6 @@
-<?php namespace DataTests;
+<?php
+
+namespace DataTests;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;

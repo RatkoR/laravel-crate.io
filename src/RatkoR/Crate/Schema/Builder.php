@@ -1,61 +1,63 @@
-<?php namespace RatkoR\Crate\Schema;
+<?php
+
+namespace RatkoR\Crate\Schema;
 
 use RatkoR\Crate\Schema\Blueprint;
 use Closure;
 
 class Builder extends \Illuminate\Database\Schema\Builder
 {
-	/**
-	 * Determine if the given table exists.
-	 *
-	 * @param  string  $table
-	 * @return bool
-	 */
-	public function hasTable($table)
-	{
-		$sql = $this->grammar->compileTableExists();
+    /**
+     * Determine if the given table exists.
+     *
+     * @param  string  $table
+     * @return bool
+     */
+    public function hasTable($table)
+    {
+        $sql = $this->grammar->compileTableExists();
 
-		$database = $this->connection->getDatabaseName();
+        $database = $this->connection->getDatabaseName();
 
-		$table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix().$table;
 
-		return count($this->connection->select($sql, array($database, $table))) > 0;
-	}
+        return count($this->connection->select($sql, array($database, $table))) > 0;
+    }
 
-	/**
-	 * Get the column listing for a given table.
-	 *
-	 * @param  string  $table
-	 * @return array
-	 */
-	public function getColumnListing($table)
-	{
-		$sql = $this->grammar->compileColumnExists();
+    /**
+     * Get the column listing for a given table.
+     *
+     * @param  string  $table
+     * @return array
+     */
+    public function getColumnListing($table)
+    {
+        $sql = $this->grammar->compileColumnExists();
 
-		$database = $this->connection->getDatabaseName();
+        $database = $this->connection->getDatabaseName();
 
-		$table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix().$table;
 
-		$results = $this->connection->select($sql, array($database, $table));
+        $results = $this->connection->select($sql, array($database, $table));
 
-		return $this->connection->getPostProcessor()->processColumnListing($results);
-	}
+        return $this->connection->getPostProcessor()->processColumnListing($results);
+    }
 
-	
-	/**
-	 * Create a new command set with a Closure.
-	 *
-	 * @param  string  $table
-	 * @param  \Closure|null  $callback
-	 * @return \Illuminate\Database\Schema\Blueprint
-	 */
-	protected function createBlueprint($table, Closure $callback = null)
-	{
-		if (isset($this->resolver))
-		{
-			return call_user_func($this->resolver, $table, $callback);
-		}
 
-		return new Blueprint($table, $callback);
-	}
+    /**
+     * Create a new command set with a Closure.
+     *
+     * @param  string  $table
+     * @param  \Closure|null  $callback
+     * @return \Illuminate\Database\Schema\Blueprint
+     */
+    protected function createBlueprint($table, Closure $callback = null)
+    {
+        if (isset($this->resolver))
+        {
+            return call_user_func($this->resolver, $table, $callback);
+        }
+
+        return new Blueprint($table, $callback);
+    }
 }
