@@ -256,4 +256,40 @@ class DataTest extends TestCase {
         $this->assertNotNull($results->first()->name);
         $this->assertEquals(5, $results->total());
     }
+
+    /** @test */
+    public function it_tests_prepared_statements_with_params()
+    {
+        User::create(['id'=>2,'name'=>'User a 2','email'=>'user2@example.com']);
+        User::create(['id'=>3,'name'=>'User a 3','email'=>'user3@example.com']);
+        sleep(1);
+
+        $this->assertEquals(2, User::count());
+
+        $user_2 = DB::select('select * from t_users where id = ?', array(2));
+        $user_3 = DB::select('select * from t_users where id = ?', array(3));
+
+        $this->assertEquals(2, $user_2[0]['id']);
+        $this->assertEquals(3, $user_3[0]['id']);
+        $this->assertEquals('user2@example.com', $user_2[0]['email']);
+        $this->assertEquals('user3@example.com', $user_3[0]['email']);
+    }
+
+    /** @test */
+    public function it_tests_prepared_statements_without_params()
+    {
+        User::create(['id'=>2,'name'=>'User a 2','email'=>'user2@example.com']);
+        User::create(['id'=>3,'name'=>'User a 3','email'=>'user3@example.com']);
+        sleep(1);
+
+        $this->assertEquals(2, User::count());
+
+        $user_2 = DB::select('select * from t_users where id = 2');
+        $user_3 = DB::select('select * from t_users where id = 3');
+
+        $this->assertEquals(2, $user_2[0]['id']);
+        $this->assertEquals(3, $user_3[0]['id']);
+        $this->assertEquals('user2@example.com', $user_2[0]['email']);
+        $this->assertEquals('user3@example.com', $user_3[0]['email']);
+    }
 }
