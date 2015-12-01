@@ -47,6 +47,12 @@ DB provider in Laravel. Open `config/app.php` and add:
 
 to the list of `providers`.
 
+Laravel 5.1 users can add:
+
+```php
+RatkoR\Crate\CrateServiceProvider::class,
+```
+
 You'll have to install crate.io server, of course. See installation
 instructions on their site.
 
