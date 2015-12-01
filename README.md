@@ -191,7 +191,7 @@ An example of schema in migration file would be:
             $table->bigInteger('nb_views');
             $table->timestamp('published_on');
 
-            $table->arrayField('images','object as (id integer, title string');
+            $table->arrayField('images','object as (id integer, title string)');
             $table->objectField('author','(dynamic) as (id integer, name string)');
 
             $table->timestamps();
