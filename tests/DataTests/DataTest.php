@@ -108,11 +108,13 @@ class DataTest extends TestCase {
     public function it_updates_user()
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
-        User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com']);
+        User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com','f_array'=>['one','two'], 'f_object' => ['subkey'=>'sub-key','subname'=>'sub-name']]);
         sleep(1);
 
         $user = User::find(2);
         $user->name = 'User X';
+        $user->f_array = ['three', 'four'];
+        $user->f_object = ['subkey'=>'new-sub-key', 'subname' => 'new-sub-name'];
         $user->save();
 
         $this->assertInstanceOf('DataTests\Models\User', $user);
@@ -125,6 +127,10 @@ class DataTest extends TestCase {
         $this->assertInstanceOf('DataTests\Models\User', $user);
         $this->assertEquals(true, $user->exists);
         $this->assertEquals('User X', $user->name);
+        $this->assertEquals(['three', 'four'], $user->f_array);
+        $this->assertEquals('new-sub-name', $user->f_object['subname']);
+        $this->assertEquals(['subkey'=>'new-sub-key','subname' => 'new-sub-name'], $user->f_object);
+
         $this->assertInstanceOf('Carbon\Carbon', $user->created_at);
         $this->assertInstanceOf('Carbon\Carbon', $user->updated_at);
         $this->assertNotEquals($user->created_at->timestamp, $user->updated_at->timestamp);

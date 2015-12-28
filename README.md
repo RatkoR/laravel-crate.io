@@ -197,7 +197,7 @@ An example of schema in migration file would be:
             $table->bigInteger('nb_views');
             $table->timestamp('published_on');
 
-            $table->arrayField('images','object as (id integer, title string)');
+            $table->arrayField('images','object as (id integer, title string');
             $table->objectField('author','(dynamic) as (id integer, name string)');
 
             $table->timestamps();
@@ -407,7 +407,9 @@ $articles = Article::where('id','=',3)->orWhere(function($query)
 $new = Article::create([
     'id' => 1, // don't forget, there is no auto increment
     'title' => 'John Doe and friends',
-    'summary' => '...'
+    'summary' => '...',
+    'array_of_strings' => ['one', 'two'],
+    'object_field' => ['author' => 'Someone', 'title' => 'Editpr']
 ]);
 ```
 
@@ -416,7 +418,27 @@ $new = Article::create([
 $article = Article::find(1);
 
 $article->title = 'Brand new title';
+$article->array_of_strings = ['tree', 'four'];
+$article->object_field = ['author' => 'Someone Else', 'title' => 'Administrator'];
 $article->save();
+```
+
+*Note*: when you update array or object field, whatever is in that field will be
+replaced with whatever you give. You cannot append or change just one value.
+
+```php
+$article->object_field = ['crated_by' => 'Third Person'];
+```
+
+would *not* append 'created_by' field to the fields that are already existing, but
+would overwrite and leave only 'created_by' value in 'object_field'. To fix this,
+do an update like:
+
+```php
+$newValues = $article->object_field;
+$newValues['created_by'] = 'Third Person';
+
+$article->object_field = $newValues;
 ```
 
 #####Deleting

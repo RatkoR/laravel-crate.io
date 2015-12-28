@@ -40,4 +40,26 @@ class Model extends BaseModel
 
         return parent::newBaseQueryBuilder();
     }
+
+    /**
+     * Get the attributes that have been changed since last sync.
+     *
+     * This function tests array fields if their values have changed.
+     * This is extra to the tests that laravel original code does.
+     * 
+     * @return array
+     */
+    public function getDirty()
+    {
+        $dirty = parent::getDirty();
+
+        foreach ($this->attributes as $key => $value) {
+            if (is_array($value) && !array_key_exists($key, $dirty)) {
+                if (json_encode($value) !== json_encode($this->original[$key]))
+                    $dirty[$key] = $value;
+            }
+        }
+
+        return $dirty;
+    }
 }

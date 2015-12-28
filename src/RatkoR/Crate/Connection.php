@@ -7,6 +7,7 @@ use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;
 use RatkoR\Crate\Query\Grammars\Grammar as QueryGrammar;
 use RatkoR\Crate\Schema\Grammars\Grammar as SchemaGrammar;
 use Crate\PDO\PDO;
+use RatkoR\Crate\Query\Builder as QueryBuilder;
 
 class Connection extends \Illuminate\Database\Connection
 {
@@ -30,7 +31,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\MySqlBuilder
+     * @return \Illuminate\Database\Schema\Builder
      */
     public function getSchemaBuilder()
     {
@@ -42,7 +43,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\MySqlGrammar
+     * @return \Illuminate\Database\Query\Grammars\Grammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -52,7 +53,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\MySqlGrammar
+     * @return \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function getDefaultSchemaGrammar()
     {
@@ -110,6 +111,37 @@ class Connection extends \Illuminate\Database\Connection
         });
     }
 
+    /**
+     * Run an SQL statement and get the number of rows affected.
+     *
+     * See description for statement() to see why we need to override
+     * this funciton.
+     *
+     * @param  string  $query
+     * @param  array   $bindings
+     * @return int
+     */
+    public function affectingStatement($query, $bindings = [])
+    {
+        return $this->run($query, $bindings, function ($me, $query, $bindings) {
+            if ($me->pretending()) {
+                return 0;
+            }
+
+            $bindings = $me->prepareBindings($bindings);
+
+            // For update or delete statements, we want to get the number of rows affected
+            // by the statement and return that back to the developer. We'll first need
+            // to execute the statement and then we'll use PDO to fetch the affected.
+            $statement = $me->getPdo()->prepare($query);
+
+            $this->bindParameters($statement, $bindings);
+            $statement->execute();
+
+            return $statement->rowCount();
+        });
+    }
+
     protected function bindParameters(&$stmt, $values)
     {
         if (!$values || !is_array($values))
@@ -149,5 +181,17 @@ class Connection extends \Illuminate\Database\Connection
             default:
                 return PDO::PARAM_STR;
         }
+    }
+
+    /**
+     * Get a new query builder instance.
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function query()
+    {
+        return new QueryBuilder(
+            $this, $this->getQueryGrammar(), $this->getPostProcessor()
+        );
     }
 }

@@ -88,4 +88,19 @@ class Builder extends BaseBuilder
         throw new NotImplementedException('Subselects are not implemented in Crate');
     }
 
+    /**
+     * Update a record in the database.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function update(array $values)
+    {
+
+        $bindings = array_values(array_merge($values, $this->getBindings()));
+
+        $sql = $this->grammar->compileUpdate($this, $values);
+
+        return $this->connection->update($sql, $this->cleanBindings($bindings));
+    }
 }
