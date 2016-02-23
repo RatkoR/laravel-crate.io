@@ -26,6 +26,8 @@ open an issue ticket**.
 
 ###Installation
 
+**This branch (1.x.x) is suitable for Laravel versions 5.0, 5.1 and 5.2 up to and including 5.2.14.** For versions 5.2.15 and more, use branch 2.0.
+
 Add a require to your composer.json  :
 
 ```json
