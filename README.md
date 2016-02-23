@@ -35,17 +35,27 @@ open an issue ticket**.
 
 ###Installation
 
-Add a require to your composer.json  :
+Add a require to your composer.json (for laravel 5.2.15 or higher) :
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "*"
+        "ratkor/laravel-crate.io": "2.*"
     }
 }
 ```
 
 and run `composer update`.
+
+Use version 1 for laravel 5.2.14 or less: 
+
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "1.*"
+    }
+}
+```
 
 After composer downloads your package, you'll have to register this new Crate
 DB provider in Laravel. Open `config/app.php` and add:
@@ -56,7 +66,7 @@ DB provider in Laravel. Open `config/app.php` and add:
 
 to the list of `providers`.
 
-Laravel 5.1 users can add:
+Laravel 5.1 and 5.2 users can add:
 
 ```php
 RatkoR\Crate\CrateServiceProvider::class,
