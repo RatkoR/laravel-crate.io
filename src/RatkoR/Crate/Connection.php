@@ -16,16 +16,17 @@ class Connection extends \Illuminate\Database\Connection
      *
      * NOTE! Crate cannot use PDO::FETCH_CLASS fetch mode, so
      * 	we silently  change it to PDO::FETCH_ASSOC
+     * 	https://crate.io/docs/reference/pdo/usage.html#fetch-modes
      *
      * @param  int  $fetchMode
      * @return int
      */
-    public function setFetchMode($fetchMode)
+    public function setFetchMode($fetchMode, $fetchArgument = null, array $ctorArgs = [])
     {
         if ($fetchMode === \PDO::FETCH_CLASS)
             $fetchMode = \PDO::FETCH_ASSOC;
 
-        parent::setFetchMode($fetchMode);
+        parent::setFetchMode($fetchMode, $fetchArgument, $ctorArgs);
     }
 
     /**

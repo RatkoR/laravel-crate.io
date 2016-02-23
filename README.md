@@ -24,6 +24,14 @@ DB servers a lot.
 Still, it's still early in development, so **if you find any bugs, please
 open an issue ticket**.
 
+### Laravel version Compatibility
+
+ Laravel  | Package
+:---------|:----------
+ 5.0.x    | 1.x.x
+ 5.1.x    | 1.x.x
+ 5.2.0 - 5.2.14    | 2.x.x
+
 ###Installation
 
 Add a require to your composer.json  :
@@ -130,7 +138,8 @@ randomization, add a `randomHosts` parameter and set it to `false`:
 Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
 This happens only for Crate connections, your normal MySQL connections will still use FETCH_CLASS.
 
-See more about fetch types on their [github](https://github.com/crate/crate-pdo).
+See more about fetch types on their [github](https://github.com/crate/crate-pdo) or
+[crate](https://crate.io/docs/reference/pdo/usage.html#fetch-modes) page.
 
 
 ###What works and what doesn't
