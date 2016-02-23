@@ -28,17 +28,19 @@ open an issue ticket**.
 
 **This branch (1.x.x) is suitable for Laravel versions 5.0, 5.1 and 5.2 up to and including 5.2.14.** For versions 5.2.15 and more, use branch 2.0.
 
-Add a require to your composer.json  :
+Add a require to your composer.json (use version 1.* of this module):
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "*"
+        "ratkor/laravel-crate.io": "1.*"
     }
 }
 ```
 
 and run `composer update`.
+
+*Version 2.0 is for laravel 5.2.15 or more.*
 
 After composer downloads your package, you'll have to register this new Crate
 DB provider in Laravel. Open `config/app.php` and add:
