@@ -31,7 +31,13 @@ open an issue ticket**.
  5.0.x    | 1.x.x
  5.1.x    | 1.x.x
  5.2.0 - 5.2.14    | 1.x.x
- 5.2.15 - 5.2.*    | 2.x.x
+ 5.2.15 - 5.2.19    | 2.0.x
+ 5.2.20 - 5.2.*    | 2.1.x
+
+There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
+in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
+laravel and latest version of this driver if it affects you (or use older
+driver).
 
 ###Installation
 
