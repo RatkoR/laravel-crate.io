@@ -318,7 +318,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     /**
      * Do not allow creating of fields like _id, _score, _version
      */
-    protected function addColumn($type, $name, array $parameters = [])
+    public function addColumn($type, $name, array $parameters = [])
     {
         if (in_array($name, ['_id', '_score', '_version'])) {
             throw new NotImplementedException("Naming column as '$name' is not supported.");
