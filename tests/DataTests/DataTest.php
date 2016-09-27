@@ -146,8 +146,8 @@ class DataTest extends TestCase {
         $users = User::all();
 
         $this->assertEquals(2, count($users));
-        $this->assertContains('User 1', $users->lists('name'));
-        $this->assertContains('User 2', $users->lists('name'));
+        $this->assertContains('User 1', $users->pluck('name'));
+        $this->assertContains('User 2', $users->pluck('name'));
     }
 
     /** @test */
