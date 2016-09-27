@@ -28,20 +28,37 @@ open an issue ticket**.
 
  Laravel  | Package
 :---------|:----------
- 5.0.x    | 1.x.x
- 5.1.x    | 1.x.x
- 5.2.0 - 5.2.14    | 1.x.x
- 5.2.15 - 5.2.19    | 2.0.x
- 5.2.20 - 5.2.*    | 2.1.x
+ 5.0.x    | 1.*
+ 5.1.x    | 1.*
+ 5.2.0 - 5.2.14    | 1.*
+ 5.2.15 - 5.2.19    | 2.0.*
+ 5.2.20 - 5.2.*    | 2.1.*
+ 5.3.*    | 3.0.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
 laravel and latest version of this driver if it affects you (or use older
 driver).
 
+Laravel 5.3 changed some aprts of Database Schema methods so you'll need to use
+version 3.0 to be compatible.
+
+
 ###Installation
 
-Add a require to your composer.json (for laravel 5.2.15 or higher) :
+Add a require to your composer.json (**laravel 5.3** branch) :
+
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "3.0.*"
+    }
+}
+```
+
+and run `composer update`.
+
+For **laravel 5.2.15** (and any version higher in the 5.2 branch) use 2.* version :
 
 ```json
 {
@@ -53,7 +70,7 @@ Add a require to your composer.json (for laravel 5.2.15 or higher) :
 
 and run `composer update`.
 
-Use version 1 for laravel 5.2.14 or less: 
+Use version 1 for **laravel 5.2.14** or less: 
 
 ```json
 {
