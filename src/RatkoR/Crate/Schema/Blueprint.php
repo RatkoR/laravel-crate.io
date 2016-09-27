@@ -112,12 +112,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      * @param  array         $options
      * @return Blueprint
      */
-    public function index($columns = null, $options = array())
+    public function index($columns = null, $options = array(), $algorithm = null)
     {
         /**
          * PLAIN and INDEX OFF are only with column names and are not
-         * stored into indexes array, only fulltext as they are
-         * later in the process generated as named index columns.
+         * stored into indexes array, only fulltext is. they are generated
+         * later in the process as named index columns.
          */
         if ($this->isFulltextIndex($options)) {
             $this->indexes[] = ['type'=>'fulltext','columns' => $columns, 'options' => $options];
@@ -197,9 +197,10 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @param  string  $name
+     * @param  string|null  $algorithm
      * @return \Illuminate\Support\Fluent
      */
-    public function primary($columns, $name = null)
+    public function primary($columns, $name = null, $algorithm = null)
     {
         $this->indexes[] = ['type'=>'primary','columns' => $columns];
     }
@@ -209,9 +210,10 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @param  string  $name
+     * @param  string|null  $algorithm
      * @return \Illuminate\Support\Fluent
      */
-    public function unique($columns, $name = null)
+    public function unique($columns, $name = null, $algorithm = null)
     {
         throw new NotImplementedException('Unique index not implemented in Crate.io');
     }
