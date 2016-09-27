@@ -40,8 +40,8 @@ in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
 laravel and latest version of this driver if it affects you (or use older
 driver).
 
-Laravel 5.3 changed some aprts of Database Schema methods so you'll need to use
-version 3.0 to be compatible.
+Laravel 5.3 changed some Database Schema methods so you'll need to use
+version 3.0 to stay compatible.
 
 
 ###Installation
