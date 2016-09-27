@@ -23,7 +23,7 @@ class Connection extends \Illuminate\Database\Connection
      */
     public function setFetchMode($fetchMode, $fetchArgument = null, array $ctorArgs = [])
     {
-        if ($fetchMode === \PDO::FETCH_CLASS)
+        if ($fetchMode !== \PDO::FETCH_ASSOC)
             $fetchMode = \PDO::FETCH_ASSOC;
 
         parent::setFetchMode($fetchMode, $fetchArgument, $ctorArgs);
