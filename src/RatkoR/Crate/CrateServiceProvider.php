@@ -29,14 +29,17 @@ class CrateServiceProvider extends ServiceProvider
     {
         $this->app->resolving('db', function($db)
         {
-            $db->extend('crate', function($config)
+            $db->extend('crate', function($config, $name)
             {
+                $config['name'] = $name;
+
                 $connector = new Connector();
                 $connection = $connector->connect($config);
 
                 $database = $config['database'] ?: 'doc';
+                $prefix = isset($config['prefix']) ? $config['prefix'] : '';
 
-                return new Connection($connection, $database);
+                return new Connection($connection, $database, $prefix, $config);
             });
         });
     }
