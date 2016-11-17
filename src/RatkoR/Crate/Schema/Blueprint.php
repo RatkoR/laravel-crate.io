@@ -91,6 +91,39 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     }
 
     /**
+     * geo_point field
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function geoPoint($column)
+    {
+        return $this->addColumn('geopoint', $column);
+    }
+
+    /**
+     * geo_shape field
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function geoShape($column)
+    {
+        return $this->addColumn('geoshape', $column);
+    }
+
+    /**
+     * ip field
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function ip($column)
+    {
+        return $this->addColumn('ip', $column);
+    }
+
+    /**
      * Returns true for fulltext indexes.
      *
      * This is true if index is created as:

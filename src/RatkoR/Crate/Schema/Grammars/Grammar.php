@@ -645,4 +645,37 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
     {
         return '';
     }
+
+    /**
+     * Create the column definition for a geopoint type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     */
+    protected function typeGeoPoint(Fluent $column)
+    {
+        return 'geo_point';
+    }
+
+    /**
+     * Create the column definition for a geo shape type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     */
+    protected function typeGeoShape(Fluent $column)
+    {
+        return 'geo_shape';
+    }
+
+    /**
+     * Create the column definition for a ip type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     */
+    protected function typeIp(Fluent $column)
+    {
+        return 'ip';
+    }
 }
