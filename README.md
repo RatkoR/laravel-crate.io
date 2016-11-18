@@ -33,7 +33,7 @@ open an issue ticket**.
  5.2.0 - 5.2.14    | 1.*
  5.2.15 - 5.2.19    | 2.0.*
  5.2.20 - 5.2.*    | 2.1.*
- 5.3.*    | 3.0.*
+ 5.3.*    | 3.0.*, 3.1.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -489,6 +489,53 @@ $article->object_field = $newValues;
 $article = Article::find(1);
 $article->delete();
 ```
+
+###Changes
+
+####Version 3.1
+
+#####Exceptions
+
+Version 3.1. brings custom QueryException. This means that in case of
+SQL errors you'll be able to see SQL and it's parameters even if some of
+them are objects or arrays.
+
+```
+$foo = new stdClass();
+$foo->bar = 'test';
+User::create(['id'=>1,'name'=> $foo,'email'=>'user1@example.com']);
+```
+
+Throws:
+
+```
+QueryException:
+SQLActionException [Validation failed for name: cannot cast {bar=test} to string] (SQL: insert into users (id, name, email) values (1, {"bar":"test"}, "user1@example.com"))
+```
+
+#####Connection
+
+Connection to crate can take table prefix.
+Add ```prefix``` key to your crate configuration to use it.
+
+```php
+'crate' => array(
+    'driver'   => 'crate',
+    'host'     => 'localhost',
+    'database' => 'doc',
+    'port'     => 4200,
+    'prefix'   => 'sys',
+),
+```
+
+#####New types
+
+* geoPoint
+* geoShape
+* ip
+
+See [commit](https://github.com/RatkoR/laravel-crate.io/pull/10/commits/138289591e291aceb718e27a95123342be09b45b)
+and official crate [docs](https://crate.io/a/geo-shapes-in-crate/)
 
 ###Tests
 
