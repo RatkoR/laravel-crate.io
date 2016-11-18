@@ -2,12 +2,15 @@
 
 namespace RatkoR\Crate;
 
+use Closure;
+use Exception;
 use RatkoR\Crate\Schema\Builder;
 use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;
 use RatkoR\Crate\Query\Grammars\Grammar as QueryGrammar;
 use RatkoR\Crate\Schema\Grammars\Grammar as SchemaGrammar;
 use Crate\PDO\PDO;
 use RatkoR\Crate\Query\Builder as QueryBuilder;
+use RatkoR\Crate\QueryException as QueryException;
 
 class Connection extends \Illuminate\Database\Connection
 {
@@ -195,4 +198,43 @@ class Connection extends \Illuminate\Database\Connection
             $this, $this->getQueryGrammar(), $this->getPostProcessor()
         );
     }
+
+   /**
+     * Crate works with extended fields like arrays and objects. If
+     * exception is triggered, laravel logs SQL and
+     * it's parameters. While doing this it casts parameters to
+     * string which then fails in it's default QueryException with:
+     *    ErrorException: Object of class stdClass could not be converted to string
+     *
+     * We're overriding runQueryCallback to trigger our own
+     * version of QueryException.
+     * 
+     * @param  string    $query
+     * @param  array     $bindings
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Illuminate\Database\QueryException
+     */
+    protected function runQueryCallback($query, $bindings, Closure $callback)
+    {
+        // To execute the statement, we'll simply call the callback, which will actually
+        // run the SQL against the PDO connection. Then we can calculate the time it
+        // took to execute and log the query SQL, bindings and time in our memory.
+        try {
+            $result = $callback($this, $query, $bindings);
+        }
+
+        // If an exception occurs when attempting to run a query, we'll format the error
+        // message to include the bindings with SQL, which will make this exception a
+        // lot more helpful to the developer instead of just the database's errors.
+        catch (Exception $e) {
+            throw new QueryException(
+                $query, $this->prepareBindings($bindings), $e
+            );
+        }
+
+        return $result;
+    }
+
 }

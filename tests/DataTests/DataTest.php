@@ -298,4 +298,17 @@ class DataTest extends TestCase {
         $this->assertEquals('user2@example.com', $user_2[0]['email']);
         $this->assertEquals('user3@example.com', $user_3[0]['email']);
     }
+
+    /**
+     * @test
+     * @expectedException RatkoR\Crate\QueryException
+     * @expectedExceptionMessage cannot cast {bar=test} to string
+     */
+    public function it_throws_meaningful_error()
+    {
+        $foo = new stdClass();
+        $foo->bar = 'test';
+
+        User::create(['id'=>1,'name'=> $foo,'email'=>'user1@example.com']);
+    }
 }
