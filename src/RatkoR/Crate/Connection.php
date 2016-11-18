@@ -3,6 +3,7 @@
 namespace RatkoR\Crate;
 
 use Closure;
+use Exception;
 use RatkoR\Crate\Schema\Builder;
 use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;
 use RatkoR\Crate\Query\Grammars\Grammar as QueryGrammar;
