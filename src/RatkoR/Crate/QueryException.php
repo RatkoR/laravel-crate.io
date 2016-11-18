@@ -3,6 +3,7 @@
 namespace RatkoR\Crate;
 
 use Illuminate\Database\QueryException as BaseQueryException;
+use Illuminate\Support\Str;
 
 class QueryException extends BaseQueryException
 {
@@ -19,15 +20,15 @@ class QueryException extends BaseQueryException
      */
     protected function formatMessage($sql, $bindings, $previous)
     {
-        $stringCasted = $this->valuesToStrings($bindings);
+        $preparedBindings = $this->prepareBindings($bindings);
 
-        return $previous->getMessage().' (SQL: '.Str::replaceArray('?', $bindings, $sql).')';
+        return $previous->getMessage().' (SQL: '.Str::replaceArray('?', $preparedBindings, $sql).')';
     }
 
     /**
      * Non scalar fields are json_encoded to string values.
      */
-    protected function valuesToStrings($bindings)
+    protected function prepareBindings($bindings)
     {
         foreach ($bindings as $key => $binding) {
             $bindings[$key] = is_scalar($binding) ?
