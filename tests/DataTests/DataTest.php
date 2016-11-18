@@ -301,7 +301,7 @@ class DataTest extends TestCase {
 
     /**
      * @test
-     * @expectedException Crate\PDO\Exception\PDOException
+     * @expectedException RatkoR\Crate\QueryException
      * @expectedExceptionMessage cannot cast {bar=test} to string
      */
     public function it_throws_meaningful_error()
