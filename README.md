@@ -3,7 +3,7 @@
 This is an Eloquent and Query builder support for Crate.io. Extends
 the original Laravel API with Crate PDO driver.
 
-###Crate and Crate PDO
+### Crate and Crate PDO
 
 Crate is a distributed SQL Database based on Elasticsearch, Lucene
 and other goodies. See their official page on [Crate.io](https://crate.io)
@@ -14,7 +14,7 @@ Crate.io published a [PDO](https://github.com/crate/crate-pdo) and
 the crate DB server.
 Laravel-crate.io project uses those adapters when connecting to Crate DB.  
 
-###Project status
+### Project status
 
 Laravel-crate.io is used in our internal projects. We did a bunch of
 unit tests and the driver seems ok. We use id as a caching layer in front
@@ -44,7 +44,7 @@ Laravel 5.3 changed some Database Schema methods so you'll need to use
 version 3.0 to stay compatible.
 
 
-###Installation
+### Installation
 
 Add a require to your composer.json (**laravel 5.3** branch) :
 
@@ -99,7 +99,7 @@ You'll have to install crate.io server, of course. See installation
 instructions on their site.
 
 
-###Configuration
+### Configuration
 
 Open `config/database.php` and add new crate database connection (with
 config values to match your setup):
@@ -119,7 +119,7 @@ Next, change default database connection to `"crate"`.
 'default' => 'crate',
 ```
 
-####Configuration for multiple hosts
+#### Configuration for multiple hosts
 
 This driver can handle conenctions to multiple crate hosts. To use them, write
 `host` config parameter as a comma delimited list of hosts. Like:
@@ -176,7 +176,7 @@ See more about fetch types on their [github](https://github.com/crate/crate-pdo)
 [crate](https://crate.io/docs/reference/pdo/usage.html#fetch-modes) page.
 
 
-###What works and what doesn't
+### What works and what doesn't
 
 Crate.io supports many of the SQL statements, but not all of them. Be sure to
 take a look at their [site](https://crate.io/docs/stable/sql/index.html) if you're in doubt.
@@ -207,7 +207,7 @@ Also, `Article::truncate()` has been changed to silently use `delete from articl
 Note, that Crate.io does not support uppercase letters in table or schema names.
 See this and other restrictions [here](https://crate.io/docs/stable/sql/ddl.html#naming-restrictions).
 
-###Schema support
+### Schema support
 
 Migration and schema are supported. You can use `artisan migrate` commands
 to create or drop tables.
@@ -249,7 +249,7 @@ An example of schema in migration file would be:
         });
 ```
 
-####Blob tables
+#### Blob tables
 
 Creating (and dropping) blob tables is also supported. Blob tables don't have arbitrary
 colums, just digest and last_moified. And even these are created automatically.
@@ -269,7 +269,7 @@ To drop a table in schema do:
 ```
 
 
-####Description of some SQL/Crate schema differences
+#### Description of some SQL/Crate schema differences
 
 **Fulltext index on a single field can be added as:**  
 ```php
@@ -344,7 +344,7 @@ $table->arrayField('f_array','object as (age integer, name string');
 ```
 
 
-###Basic usage
+### Basic usage
 
 With crate DB connection, you can do simple and even more complex queries.
 Some examples are:  
@@ -358,7 +358,7 @@ $users = DB::table('user')->get();
 ```
 
 
-###Eloquent
+### Eloquent
 
 To use Eloquent you'll need to use Crate Eloquent model.
 
@@ -376,7 +376,7 @@ protected $table = 'myArticles';
 ```
 etc...
 
-####Eloquent model alias
+#### Eloquent model alias
 
 Instead of adding  
 ```php
@@ -394,46 +394,46 @@ use CrateEloquent;
 class Article extends CrateEloquent {}
 ```
 
-####Eloquent usage
+#### Eloquent usage
 
 It can be used mostly the same as an original Laravel eloquent model.
 
-#####Getting all articles:  
+##### Getting all articles:  
 ```php
 $articles = Article::all();
 ```
 
-#####Getting by primary key:  
+##### Getting by primary key:  
 ```php
 $article = Article::find(1);
 ```
 
-#####Using where(s):  
+##### Using where(s):  
 ```php
 $articles = Article::where('name','LIKE','Star%')->where('views','>',100)->get();
 ```
 
-#####Using limits(s):  
+##### Using limits(s):  
 ```php
 $articles = Article::where('name','LIKE','Star%')->take(10)->get();
 ```
 
-#####Using whereIn:  
+##### Using whereIn:  
 ```php
 $articles = Article::whereIn('id',[1,2,3])->get();
 ```
 
-#####Using select for fields:  
+##### Using select for fields:  
 ```php
 $article = Article::select('id','name')->where('id',1)->first();
 ```
 
-#####Using count:  
+##### Using count:  
 ```php
 $nb = Article::where('views','>',100)->count();
 ```
 
-#####Complex where(s):  
+##### Complex where(s):  
 ```php
 $articles = Article::where('id','=',3)->orWhere(function($query)
             {
@@ -445,7 +445,7 @@ $articles = Article::where('id','=',3)->orWhere(function($query)
 *etc...*  
 
 
-#####Inserting
+##### Inserting
 ```php
 $new = Article::create([
     'id' => 1, // don't forget, there is no auto increment
@@ -456,7 +456,7 @@ $new = Article::create([
 ]);
 ```
 
-#####Updating
+##### Updating
 ```php
 $article = Article::find(1);
 
@@ -484,17 +484,17 @@ $newValues['created_by'] = 'Third Person';
 $article->object_field = $newValues;
 ```
 
-#####Deleting
+##### Deleting
 ```php
 $article = Article::find(1);
 $article->delete();
 ```
 
-###Changes
+### Changes
 
-####Version 3.1
+#### Version 3.1
 
-#####Exceptions
+##### Exceptions
 
 Version 3.1. brings custom QueryException. This means that in case of
 SQL errors you'll be able to see SQL and it's parameters even if some of
@@ -513,7 +513,7 @@ QueryException:
 SQLActionException [Validation failed for name: cannot cast {bar=test} to string] (SQL: insert into users (id, name, email) values (1, {"bar":"test"}, "user1@example.com"))
 ```
 
-#####Connection
+##### Connection
 
 Connection to crate can take table prefix.
 Add ```prefix``` key to your crate configuration to use it.
@@ -528,7 +528,7 @@ Add ```prefix``` key to your crate configuration to use it.
 ),
 ```
 
-#####New types
+##### New types
 
 * geoPoint
 * geoShape
@@ -537,14 +537,14 @@ Add ```prefix``` key to your crate configuration to use it.
 See [commit](https://github.com/RatkoR/laravel-crate.io/pull/10/commits/138289591e291aceb718e27a95123342be09b45b)
 and official crate [docs](https://crate.io/a/geo-shapes-in-crate/)
 
-###Tests
+### Tests
 
 There are two kinds of tests:  
 + Lexical tests
 + Data tests
 
 
-###Lexical tests
+### Lexical tests
 
 Lexical tests check if SQL statements produced
 by Query builder are semantically correct.
@@ -552,7 +552,7 @@ by Query builder are semantically correct.
 These tests are executed relatively fast. They check that all common
 SQLs are unaffected by code changes.
 
-###Data tests
+### Data tests
 
 Data tests connect to real Crate.io server and try to manage data there.
 Selecting, inserting, updating, deleting queries, all are tested.  
