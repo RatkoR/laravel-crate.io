@@ -34,6 +34,7 @@ open an issue ticket**.
  5.2.15 - 5.2.19    | 2.0.*
  5.2.20 - 5.2.*    | 2.1.*
  5.3.*    | 3.0.*, 3.1.*
+ 5.4.*    | 4.0.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -43,15 +44,28 @@ driver).
 Laravel 5.3 changed some Database Schema methods so you'll need to use
 version 3.0 to stay compatible.
 
+Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5.4.
 
 ### Installation
+
+Add a require to your composer.json (**laravel 5.4** branch) :
+
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "4.0.*"
+    }
+}
+```
+
+and run `composer update`.
 
 Add a require to your composer.json (**laravel 5.3** branch) :
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "3.0.*"
+        "ratkor/laravel-crate.io": "3.1.*"
     }
 }
 ```
@@ -491,6 +505,16 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 4.0
+
+Updated and synced with laravel 5.4. The `runQueryCallback` method is
+different in 5.4 as it was in 5.3. So you'll have to use 4.0 with laravel
+5.4.
+
+This is an internal change, you work with laravel and crate as you did
+before. It's just a notice that 4.0 is not compatible with <5.3 laravels.
+
 
 #### Version 3.1
 
