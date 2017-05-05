@@ -14,6 +14,8 @@ use RatkoR\Crate\QueryException as QueryException;
 
 class Connection extends \Illuminate\Database\Connection
 {
+    protected $fetchMode = PDO::FETCH_ASSOC;
+
     /**
      * Set the default fetch mode for the connection.
      *
@@ -101,13 +103,15 @@ class Connection extends \Illuminate\Database\Connection
      */
     public function statement($query, $bindings = array())
     {
-        return $this->run($query, $bindings, function($me, $query, $bindings)
+        return $this->run($query, $bindings, function($query, $bindings)
         {
-            if ($me->pretending()) return true;
+            if ($this->pretending()) {
+                return true;
+            }
 
-            $bindings = $me->prepareBindings($bindings);
+            $bindings = $this->prepareBindings($bindings);
 
-            $stmt = $me->getPdo()->prepare($query);
+            $stmt = $this->getPdo()->prepare($query);
 
             $this->bindParameters($stmt, $bindings);
 
@@ -127,17 +131,17 @@ class Connection extends \Illuminate\Database\Connection
      */
     public function affectingStatement($query, $bindings = [])
     {
-        return $this->run($query, $bindings, function ($me, $query, $bindings) {
-            if ($me->pretending()) {
+        return $this->run($query, $bindings, function ($query, $bindings) {
+            if ($this->pretending()) {
                 return 0;
             }
 
-            $bindings = $me->prepareBindings($bindings);
+            $bindings = $this->prepareBindings($bindings);
 
             // For update or delete statements, we want to get the number of rows affected
             // by the statement and return that back to the developer. We'll first need
             // to execute the statement and then we'll use PDO to fetch the affected.
-            $statement = $me->getPdo()->prepare($query);
+            $statement = $this->getPdo()->prepare($query);
 
             $this->bindParameters($statement, $bindings);
             $statement->execute();
@@ -222,7 +226,7 @@ class Connection extends \Illuminate\Database\Connection
         // run the SQL against the PDO connection. Then we can calculate the time it
         // took to execute and log the query SQL, bindings and time in our memory.
         try {
-            $result = $callback($this, $query, $bindings);
+            $result = $callback($query, $bindings);
         }
 
         // If an exception occurs when attempting to run a query, we'll format the error
