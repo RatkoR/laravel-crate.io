@@ -48,12 +48,24 @@ Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5
 
 ### Installation
 
+Add a require to your composer.json (**laravel 5.4** branch) :
+
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "4.0.*"
+    }
+}
+```
+
+and run `composer update`.
+
 Add a require to your composer.json (**laravel 5.3** branch) :
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "3.0.*"
+        "ratkor/laravel-crate.io": "3.1.*"
     }
 }
 ```
