@@ -7,19 +7,19 @@ the original Laravel API with Crate PDO driver.
 
 Crate is a distributed SQL Database based on Elasticsearch, Lucene
 and other goodies. See their official page on [Crate.io](https://crate.io)
-for more info.  
+for more info.
 
 Crate.io published a [PDO](https://github.com/crate/crate-pdo) and
 [DBAL](https://github.com/crate/crate-dbal) driver for easy access to
 the crate DB server.
-Laravel-crate.io project uses those adapters when connecting to Crate DB.  
+Laravel-crate.io project uses those adapters when connecting to Crate DB.
 
 ### Project status
 
 Laravel-crate.io is used in our internal projects. We did a bunch of
 unit tests and the driver seems ok. We use id as a caching layer in front
 of our DB servers. Crate is insanely fast (Elasticsearch) and offloads our
-DB servers a lot.  
+DB servers a lot.
 
 Still, it's still early in development, so **if you find any bugs, please
 open an issue ticket**.
@@ -35,6 +35,7 @@ open an issue ticket**.
  5.2.20 - 5.2.*    | 2.1.*
  5.3.*    | 3.0.*, 3.1.*
  5.4.*    | 4.0.*
+ 5.5.*    | 5.0.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -84,7 +85,7 @@ For **laravel 5.2.15** (and any version higher in the 5.2 branch) use 2.* versio
 
 and run `composer update`.
 
-Use version 1 for **laravel 5.2.14** or less: 
+Use version 1 for **laravel 5.2.14** or less:
 
 ```json
 {
@@ -181,7 +182,7 @@ randomization, add a `randomHosts` parameter and set it to `false`:
 ```
 
 
-**Note on PDO::FETCH_CLASS**  
+**Note on PDO::FETCH_CLASS**
 
 Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
 This happens only for Crate connections, your normal MySQL connections will still use FETCH_CLASS.
@@ -199,7 +200,7 @@ We're throwing an `RatkoR\Crate\NotImplementedException` for those statements th
 might wrongly try to use. We tried to cover all of them, but if we missed any
 you'll get Exception from Crate DB.
 
-Big things that are **not** supported are:  
+Big things that are **not** supported are:
 + joins
 + subselects
 + [auto increments](https://crate.io/docs/stable/sql/ddl.html#constraints) - you'll have to manage those by yourself
@@ -229,7 +230,7 @@ to create or drop tables.
 Crate has only a subset of [field types](https://crate.io/docs/stable/sql/data_types.html)
 (and some new ones), so choose appropriate.
 
-Crate types:  
+Crate types:
 + boolean
 + string
 + numeric (integer, long, short, double, float, byte)
@@ -241,7 +242,7 @@ Crate types:
 Some SQL types are silently linked to crate types. For example, `bigInteger` is
 linked to `long`, `text, mediumtext, longtext, enum` are linked to `string`, ...
 
-An example of schema in migration file would be:  
+An example of schema in migration file would be:
 ```php
         Schema::create('article', function(Blueprint $table)
         {
@@ -285,7 +286,7 @@ To drop a table in schema do:
 
 #### Description of some SQL/Crate schema differences
 
-**Fulltext index on a single field can be added as:**  
+**Fulltext index on a single field can be added as:**
 ```php
 $table->index('field1','fulltext');
 ```
@@ -294,22 +295,22 @@ or
 $table->string('field1')->index('fulltext');
 ```
 
-**Fulltext index on multiple fields:**  
+**Fulltext index on multiple fields:**
 ```php
 $table->index(['field1','field2'],'fulltext');
 ```
 
-**Fulltext index with english analyzer on multiple fields:**  
+**Fulltext index with english analyzer on multiple fields:**
 ```php
 $table->index(['field1','field2'],'fulltext:english');
 ```
 
-**Primary key on single field:**  
+**Primary key on single field:**
 ```php
 $table->primary('field1');
 ```
 
-**Primary key on multiple fields:**  
+**Primary key on multiple fields:**
 ```php
 $table->primary(['f_id','f2_id']);
 ```
@@ -334,25 +335,25 @@ or just leave it out, crate will index it.
 Schema::drop('article');
 ```
 
-**To add an 'object' field use:**  
+**To add an 'object' field use:**
 
 ```php
 $table->objectField('field_name', 'object parameters');
 ```
 where `object parameters` can be any parameters that crate excepts for an object.
 See their [documentation](https://crate.io/docs/stable/sql/data_types.html#object)
-for objects. Examples would be:  
+for objects. Examples would be:
 ```php
 $table->objectField('my_object_1','as (f_date timestamp)');
 $table->objectField('my_object_2','as (object(dynamic) as (name string, birthday timestamp)');
 ```
 
-**Add an 'array' field:**  
+**Add an 'array' field:**
 
 Arrays are added with `->arrayField('name', 'array parameters')`. As is with
 `object` type, `array paramters` can have any property that crate allows
 for arrays. See their [documentation](https://crate.io/docs/stable/sql/data_types.html#array).
-Examples for array of dynamic objects:  
+Examples for array of dynamic objects:
 ```php
 $table->arrayField('f_array','object as (age integer, name string');
 ```
@@ -361,12 +362,12 @@ $table->arrayField('f_array','object as (age integer, name string');
 ### Basic usage
 
 With crate DB connection, you can do simple and even more complex queries.
-Some examples are:  
+Some examples are:
 
 ```php
-$articles = DB::select('select * from article where id = ?', array(1));  
+$articles = DB::select('select * from article where id = ?', array(1));
 
-$user = DB::table('user')->where('email','some@example.com')->first();  
+$user = DB::table('user')->where('email','some@example.com')->first();
 
 $users = DB::table('user')->get();
 ```
@@ -384,7 +385,7 @@ class Article extends Eloquent {}
 
 You can use (almost) all eloquent goodies as with the original eloquent model.
 
-To use different table name, use:  
+To use different table name, use:
 ```php
 protected $table = 'myArticles';
 ```
@@ -392,7 +393,7 @@ etc...
 
 #### Eloquent model alias
 
-Instead of adding  
+Instead of adding
 ```php
 use RatkoR\Crate\Eloquent\Model AS Eloquent;
 ```
@@ -412,42 +413,42 @@ class Article extends CrateEloquent {}
 
 It can be used mostly the same as an original Laravel eloquent model.
 
-##### Getting all articles:  
+##### Getting all articles:
 ```php
 $articles = Article::all();
 ```
 
-##### Getting by primary key:  
+##### Getting by primary key:
 ```php
 $article = Article::find(1);
 ```
 
-##### Using where(s):  
+##### Using where(s):
 ```php
 $articles = Article::where('name','LIKE','Star%')->where('views','>',100)->get();
 ```
 
-##### Using limits(s):  
+##### Using limits(s):
 ```php
 $articles = Article::where('name','LIKE','Star%')->take(10)->get();
 ```
 
-##### Using whereIn:  
+##### Using whereIn:
 ```php
 $articles = Article::whereIn('id',[1,2,3])->get();
 ```
 
-##### Using select for fields:  
+##### Using select for fields:
 ```php
 $article = Article::select('id','name')->where('id',1)->first();
 ```
 
-##### Using count:  
+##### Using count:
 ```php
 $nb = Article::where('views','>',100)->count();
 ```
 
-##### Complex where(s):  
+##### Complex where(s):
 ```php
 $articles = Article::where('id','=',3)->orWhere(function($query)
             {
@@ -456,7 +457,7 @@ $articles = Article::where('id','=',3)->orWhere(function($query)
             })->get();
 ```
 
-*etc...*  
+*etc...*
 
 
 ##### Inserting
@@ -505,6 +506,11 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 5.0
+
+Updated project to work with laravel 5.5. The new `5.0` version works
+only with laravel 5.5.X.
 
 #### Version 4.0
 
@@ -563,7 +569,7 @@ and official crate [docs](https://crate.io/a/geo-shapes-in-crate/)
 
 ### Tests
 
-There are two kinds of tests:  
+There are two kinds of tests:
 + Lexical tests
 + Data tests
 
@@ -579,7 +585,7 @@ SQLs are unaffected by code changes.
 ### Data tests
 
 Data tests connect to real Crate.io server and try to manage data there.
-Selecting, inserting, updating, deleting queries, all are tested.  
+Selecting, inserting, updating, deleting queries, all are tested.
 
 These tests take longer to finish. We found that queriying for a record immediatelly
 after it has been inserted can produce negative results. Crate
@@ -591,8 +597,8 @@ Running data tests for the first time will probably fail as `migration`
 table will not exist yet. Try rerunning test and it will proceed ok.
 
 Conenction properties for tests are in `tests/DataTests/Config/database.php`
-file and can be changed for your setup.  
+file and can be changed for your setup.
 
-Data tests will create:  
+Data tests will create:
 + `t_migration` table for test table migrations,
 + `t_users` table for some dummy user data.
