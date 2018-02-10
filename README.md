@@ -36,6 +36,7 @@ open an issue ticket**.
  5.3.*    | 3.0.*, 3.1.*
  5.4.*    | 4.0.*
  5.5.*    | 5.0.*
+ 5.6.*    | 6.0.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -49,12 +50,12 @@ Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5
 
 ### Installation
 
-Add a require to your composer.json (**laravel 5.4** branch) :
+Add a require to your composer.json (**laravel 5.6.* branch) :
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "4.0.*"
+        "ratkor/laravel-crate.io": "6.0.*"
     }
 }
 ```
@@ -104,7 +105,7 @@ DB provider in Laravel. Open `config/app.php` and add:
 
 to the list of `providers`.
 
-Laravel 5.1 and 5.2 users can add:
+If you use laravel 5.1 or more, you can add:
 
 ```php
 RatkoR\Crate\CrateServiceProvider::class,
@@ -506,6 +507,10 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 6.0
+
+Updated project to work with laravel 5.6
 
 #### Version 5.0
 
