@@ -81,14 +81,15 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     }
 
     /**
-     * We do timestamps for all date fields
+     * Create a new time column on the table.
      *
      * @param  string  $column
+     * @param  int  $precision
      * @return \Illuminate\Support\Fluent
      */
-    public function time($column)
+    public function time($column, $precision = 0)
     {
-        return $this->addColumn('timestamp', $column);
+        return $this->addColumn('timestamp', $column, compact('precision'));
     }
 
     /**

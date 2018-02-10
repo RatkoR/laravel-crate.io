@@ -9,16 +9,16 @@
             "email": "ratko@kramfid.org"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "5.5.*",
-        "illuminate/database": "5.5.*",
-        "crate/crate-dbal": "0.3.*"
+        "illuminate/support": "5.6.*",
+        "illuminate/database": "5.6.*",
+        "crate/crate-dbal": "*"
     },
     "require-dev": {
-        "mockery/mockery": "^0.9.4",
-        "phpunit/phpunit": "~6.0",
-        "orchestra/testbench": "3.*"
+        "mockery/mockery": "*",
+        "phpunit/phpunit": "*",
+        "orchestra/testbench": "*"
     },
     "autoload": {
         "psr-0": {
