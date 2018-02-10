@@ -18,7 +18,7 @@ class Model extends BaseModel
     * created_at, updated_at and similar fields are
     * timespamp fields, not datetime.
     */
-    protected function getDateFormat()
+    public function getDateFormat()
     {
         return 'U';
     }
@@ -46,7 +46,7 @@ class Model extends BaseModel
      *
      * This function tests array fields if their values have changed.
      * This is extra to the tests that laravel original code does.
-     * 
+     *
      * @return array
      */
     public function getDirty()
