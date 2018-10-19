@@ -252,7 +252,10 @@ class QueryTest extends TestCase {
     public function testTruncateMethod()
     {
         $this->builder->getConnection()->shouldReceive('statement')->once()->with('delete from users', []);
-        $this->builder->from('users')->truncate();
+        $result = $this->builder->from('users')->truncate();
+
+        // dummy, it's important that it doesn't throw exception
+        $this->assertEquals(null, $result);
     }
 
     /**

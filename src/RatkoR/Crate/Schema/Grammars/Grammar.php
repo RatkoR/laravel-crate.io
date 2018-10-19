@@ -44,7 +44,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileTableExists()
     {
-        return 'select * from information_schema.tables where schema_name = ? and table_name = ?';
+        return 'select * from information_schema.tables where table_schema = ? and table_name = ?';
     }
 
     /**
@@ -54,7 +54,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileColumnExists()
     {
-        return "select column_name from information_schema.columns where schema_name = ? and table_name = ?";
+        return "select column_name from information_schema.columns where table_schema = ? and table_name = ?";
     }
 
     /**

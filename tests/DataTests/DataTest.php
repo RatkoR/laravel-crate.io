@@ -302,7 +302,7 @@ class DataTest extends TestCase {
     /**
      * @test
      * @expectedException RatkoR\Crate\QueryException
-     * @expectedExceptionMessage cannot cast {bar=test} to string
+     * @expectedExceptionMessage Cannot cast {"bar"='test'} to type string
      */
     public function it_throws_meaningful_error()
     {
