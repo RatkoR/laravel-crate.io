@@ -8,8 +8,8 @@ return [
 
         'crate' => [
             'name'	   => 'crate',
-            'host'     => '10.0.0.188',
-            'port'     => 4200,
+            'host'     => 'localhost',
+            'port'     => 4201,
             'database' => 'doc',
         ],
     ]

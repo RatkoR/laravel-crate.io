@@ -4,6 +4,7 @@ namespace RatkoR\Crate\Schema;
 
 use Closure;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Schema\Grammars\Grammar;
 use RatkoR\Crate\NotImplementedException;
 
 class Blueprint extends \Illuminate\Database\Schema\Blueprint {
@@ -336,18 +337,17 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     /**
      * Add the commands that are implied by the blueprint.
      *
+     * @param  \Illuminate\Database\Schema\Grammars\Grammar  $grammar
      * @return void
      */
-    protected function addImpliedCommands()
+    protected function addImpliedCommands(Grammar $grammar)
     {
 
-        if (count($this->getAddedColumns()) > 0 && ! $this->creating())
-        {
+        if (count($this->getAddedColumns()) > 0 && ! $this->creating()) {
             array_unshift($this->commands, $this->createCommand('add'));
         }
 
-        if (count($this->getChangedColumns()) > 0 && ! $this->creating())
-        {
+        if (count($this->getChangedColumns()) > 0 && ! $this->creating()) {
             throw new NotImplementedException('Changing columns is not supported in Crate.io');
         }
     }
