@@ -37,6 +37,7 @@ open an issue ticket**.
  5.4.*    | 4.0.*
  5.5.*    | 5.0.*
  5.6.*    | 6.0.*
+ 5.7.*    | 7.0.*
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -507,6 +508,11 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 7.0
+
+Updated project to work with laravel 5.7
+No new functionalities, only fixes compatibility issues with changes in L 5.7.
 
 #### Version 6.0
 
