@@ -319,8 +319,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      */
     public function increments($column)
     {
-        throw new NotImplementedException('Auto increments are not supported in Crate.io');
-
+        //throw new NotImplementedException('Auto increments are not supported in Crate.io');
     }
 
     /**
