@@ -26,18 +26,18 @@ open an issue ticket**.
 
 ### Laravel version Compatibility
 
- Laravel  | Package
-:---------|:----------
- 5.0.x    | 1.*
- 5.1.x    | 1.*
- 5.2.0 - 5.2.14    | 1.*
- 5.2.15 - 5.2.19    | 2.0.*
- 5.2.20 - 5.2.*    | 2.1.*
- 5.3.*    | 3.0.*, 3.1.*
- 5.4.*    | 4.0.*
- 5.5.*    | 5.0.*
- 5.6.*    | 6.0.*
- 5.7.*    | 7.0.*
+| Laravel         | Package      |
+| :-------------- | :----------- |
+| 5.0.x           | 1.\*         |
+| 5.1.x           | 1.\*         |
+| 5.2.0 - 5.2.14  | 1.\*         |
+| 5.2.15 - 5.2.19 | 2.0.\*       |
+| 5.2.20 - 5.2.\* | 2.1.\*       |
+| 5.3.\*          | 3.0._, 3.1._ |
+| 5.4.\*          | 4.0.\*       |
+| 5.5.\*          | 5.0.\*       |
+| 5.6.\*          | 6.0.\*       |
+| 5.7.\*          | 7.0.\*       |
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -51,7 +51,7 @@ Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5
 
 ### Installation
 
-Add a require to your composer.json (**laravel 5.7.* branch) :
+Add a require to your composer.json (\*_laravel 5.7._ branch) :
 
 ```json
 {
@@ -75,7 +75,7 @@ Add a require to your composer.json (**laravel 5.3** branch) :
 
 and run `composer update`.
 
-For **laravel 5.2.15** (and any version higher in the 5.2 branch) use 2.* version :
+For **laravel 5.2.15** (and any version higher in the 5.2 branch) use 2.\* version :
 
 ```json
 {
@@ -115,7 +115,6 @@ RatkoR\Crate\CrateServiceProvider::class,
 You'll have to install crate.io server, of course. See installation
 instructions on their site.
 
-
 ### Configuration
 
 Open `config/database.php` and add new crate database connection (with
@@ -136,6 +135,27 @@ Next, change default database connection to `"crate"`.
 'default' => 'crate',
 ```
 
+#### Configuration for HTTP Basic Auth
+
+This driver supports standard CrateDB auth methods `trust` and `password` via
+HTTP Basic Auth. To enable this, edit the `crate` config you created in the
+previous step, add the `auth_type` parameter of either `trust` or `password`,
+then add `username` and `password` with appropriate values for your system.
+
+For more information on CrateDB auth methods, see CrateDB's documentation about [Authentication Methods](https://crate.io/docs/crate/reference/en/latest/admin/auth/methods.html).
+
+```php
+'crate' => array(
+    'driver'      => 'crate',
+    'host'        => 'localhost',
+    'database'    => 'doc',
+    'port'        => 4200,
+    'auth_method' => 'password',
+    'username'    => 'MyUsername',
+    'password'    => 'MyPassword',
+),
+```
+
 #### Configuration for multiple hosts
 
 This driver can handle conenctions to multiple crate hosts. To use them, write
@@ -151,6 +171,7 @@ This driver can handle conenctions to multiple crate hosts. To use them, write
 ```
 
 The DSN created in this case looks like:
+
 ```
 'crate:localhost:4200,10.0.0.1:4200,10.0.0.2:4200'
 ```
@@ -162,6 +183,7 @@ If you need to specify different ports, add them to the `host` param like:
 ```
 
 which will create a DSN like:
+
 ```
 'crate:localhost:4201,10.0.0.1:4300,10.0.0.2:4200'
 ```
@@ -183,7 +205,6 @@ randomization, add a `randomHosts` parameter and set it to `false`:
 ),
 ```
 
-
 **Note on PDO::FETCH_CLASS**
 
 Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
@@ -191,7 +212,6 @@ This happens only for Crate connections, your normal MySQL connections will stil
 
 See more about fetch types on their [github](https://github.com/crate/crate-pdo) or
 [crate](https://crate.io/docs/reference/pdo/usage.html#fetch-modes) page.
-
 
 ### What works and what doesn't
 
@@ -203,21 +223,22 @@ might wrongly try to use. We tried to cover all of them, but if we missed any
 you'll get Exception from Crate DB.
 
 Big things that are **not** supported are:
-+ joins
-+ subselects
-+ [auto increments](https://crate.io/docs/stable/sql/ddl.html#constraints) - you'll have to manage those by yourself
-+ whereBetween(s)
-+ unique indexes
-+ foreign keys (and relations)
-+ dropping, renaming columns (adding fields works)
-+ naming columns like _ id, _ version, _ score - these are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html)
+
+-   joins
+-   subselects
+-   [auto increments](https://crate.io/docs/stable/sql/ddl.html#constraints) - you'll have to manage those by yourself
+-   whereBetween(s)
+-   unique indexes
+-   foreign keys (and relations)
+-   dropping, renaming columns (adding fields works)
+-   naming columns like _ id, _ version, \_ score - these are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html)
 
 Crate specific stuff that was added is:
-+ object type
-+ array type
-+ index off, index plain
-+ fulltext indexes over single or multiple fields w/o analyzers
 
+-   object type
+-   array type
+-   index off, index plain
+-   fulltext indexes over single or multiple fields w/o analyzers
 
 Also, `Article::truncate()` has been changed to silently use `delete from article`;
 
@@ -233,18 +254,20 @@ Crate has only a subset of [field types](https://crate.io/docs/stable/sql/data_t
 (and some new ones), so choose appropriate.
 
 Crate types:
-+ boolean
-+ string
-+ numeric (integer, long, short, double, float, byte)
-+ ip, geo_point (still have to implement these two)
-+ timestamp
-+ object
-+ array
+
+-   boolean
+-   string
+-   numeric (integer, long, short, double, float, byte)
+-   ip, geo_point (still have to implement these two)
+-   timestamp
+-   object
+-   array
 
 Some SQL types are silently linked to crate types. For example, `bigInteger` is
 linked to `long`, `text, mediumtext, longtext, enum` are linked to `string`, ...
 
 An example of schema in migration file would be:
+
 ```php
         Schema::create('article', function(Blueprint $table)
         {
@@ -272,12 +295,13 @@ Creating (and dropping) blob tables is also supported. Blob tables don't have ar
 colums, just digest and last_moified. And even these are created automatically.
 
 An example of create blob schema is:
+
 ```php
         Schema::createBlob('myblob');
 ```
 
-*There is no need for the callback parameter (the second parameter in createBlob() which
-defines fields). If you pass it it will be silently ignored.*
+_There is no need for the callback parameter (the second parameter in createBlob() which
+defines fields). If you pass it it will be silently ignored._
 
 To drop a table in schema do:
 
@@ -285,54 +309,66 @@ To drop a table in schema do:
     Schema::dropBlob('myblob');
 ```
 
-
 #### Description of some SQL/Crate schema differences
 
 **Fulltext index on a single field can be added as:**
+
 ```php
 $table->index('field1','fulltext');
 ```
+
 or
+
 ```php
 $table->string('field1')->index('fulltext');
 ```
 
 **Fulltext index on multiple fields:**
+
 ```php
 $table->index(['field1','field2'],'fulltext');
 ```
 
 **Fulltext index with english analyzer on multiple fields:**
+
 ```php
 $table->index(['field1','field2'],'fulltext:english');
 ```
 
 **Primary key on single field:**
+
 ```php
 $table->primary('field1');
 ```
 
 **Primary key on multiple fields:**
+
 ```php
 $table->primary(['f_id','f2_id']);
 ```
 
 **To not include a field in default index**
+
 ```php
 $table->string('not_important_field')->index('off');
 ```
 
 **A PLAIN index (the default index)**
+
 ```php
 $table->string('field')->index('plain');
 ```
+
 or
+
 ```php
 $table->string('field')->index();
 ```
+
 or just leave it out, crate will index it.
 
 **To drop a table in migration scripts:**
+
 ```php
 Schema::drop('article');
 ```
@@ -342,9 +378,11 @@ Schema::drop('article');
 ```php
 $table->objectField('field_name', 'object parameters');
 ```
+
 where `object parameters` can be any parameters that crate excepts for an object.
 See their [documentation](https://crate.io/docs/stable/sql/data_types.html#object)
 for objects. Examples would be:
+
 ```php
 $table->objectField('my_object_1','as (f_date timestamp)');
 $table->objectField('my_object_2','as (object(dynamic) as (name string, birthday timestamp)');
@@ -356,10 +394,10 @@ Arrays are added with `->arrayField('name', 'array parameters')`. As is with
 `object` type, `array paramters` can have any property that crate allows
 for arrays. See their [documentation](https://crate.io/docs/stable/sql/data_types.html#array).
 Examples for array of dynamic objects:
+
 ```php
 $table->arrayField('f_array','object as (age integer, name string');
 ```
-
 
 ### Basic usage
 
@@ -374,7 +412,6 @@ $user = DB::table('user')->where('email','some@example.com')->first();
 $users = DB::table('user')->get();
 ```
 
-
 ### Eloquent
 
 To use Eloquent you'll need to use Crate Eloquent model.
@@ -388,24 +425,29 @@ class Article extends Eloquent {}
 You can use (almost) all eloquent goodies as with the original eloquent model.
 
 To use different table name, use:
+
 ```php
 protected $table = 'myArticles';
 ```
+
 etc...
 
 #### Eloquent model alias
 
 Instead of adding
+
 ```php
 use RatkoR\Crate\Eloquent\Model AS Eloquent;
 ```
 
 to all your eloquent classes, you can add an alias to `alias` array in `config/app.php`:
+
 ```php
 'CrateEloquent' => 'RatkoR\Crate\Eloquent\Model'
 ```
 
 This will allow you to shorten the class definition to:
+
 ```php
 use CrateEloquent;
 class Article extends CrateEloquent {}
@@ -416,41 +458,49 @@ class Article extends CrateEloquent {}
 It can be used mostly the same as an original Laravel eloquent model.
 
 ##### Getting all articles:
+
 ```php
 $articles = Article::all();
 ```
 
 ##### Getting by primary key:
+
 ```php
 $article = Article::find(1);
 ```
 
 ##### Using where(s):
+
 ```php
 $articles = Article::where('name','LIKE','Star%')->where('views','>',100)->get();
 ```
 
 ##### Using limits(s):
+
 ```php
 $articles = Article::where('name','LIKE','Star%')->take(10)->get();
 ```
 
 ##### Using whereIn:
+
 ```php
 $articles = Article::whereIn('id',[1,2,3])->get();
 ```
 
 ##### Using select for fields:
+
 ```php
 $article = Article::select('id','name')->where('id',1)->first();
 ```
 
 ##### Using count:
+
 ```php
 $nb = Article::where('views','>',100)->count();
 ```
 
 ##### Complex where(s):
+
 ```php
 $articles = Article::where('id','=',3)->orWhere(function($query)
             {
@@ -459,10 +509,10 @@ $articles = Article::where('id','=',3)->orWhere(function($query)
             })->get();
 ```
 
-*etc...*
-
+_etc..._
 
 ##### Inserting
+
 ```php
 $new = Article::create([
     'id' => 1, // don't forget, there is no auto increment
@@ -474,6 +524,7 @@ $new = Article::create([
 ```
 
 ##### Updating
+
 ```php
 $article = Article::find(1);
 
@@ -483,14 +534,14 @@ $article->object_field = ['author' => 'Someone Else', 'title' => 'Administrator'
 $article->save();
 ```
 
-*Note*: when you update array or object field, whatever is in that field will be
+_Note_: when you update array or object field, whatever is in that field will be
 replaced with whatever you give. You cannot append or change just one value.
 
 ```php
 $article->object_field = ['crated_by' => 'Third Person'];
 ```
 
-would *not* append 'created_by' field to the fields that are already existing, but
+would _not_ append 'created_by' field to the fields that are already existing, but
 would overwrite and leave only 'created_by' value in 'object_field'. To fix this,
 do an update like:
 
@@ -502,6 +553,7 @@ $article->object_field = $newValues;
 ```
 
 ##### Deleting
+
 ```php
 $article = Article::find(1);
 $article->delete();
@@ -532,7 +584,6 @@ different in 5.4 as it was in 5.3. So you'll have to use 4.0 with laravel
 This is an internal change, you work with laravel and crate as you did
 before. It's just a notice that 4.0 is not compatible with <5.3 laravels.
 
-
 #### Version 3.1
 
 ##### Exceptions
@@ -557,7 +608,7 @@ SQLActionException [Validation failed for name: cannot cast {bar=test} to string
 ##### Connection
 
 Connection to crate can take table prefix.
-Add ```prefix``` key to your crate configuration to use it.
+Add `prefix` key to your crate configuration to use it.
 
 ```php
 'crate' => array(
@@ -571,9 +622,9 @@ Add ```prefix``` key to your crate configuration to use it.
 
 ##### New types
 
-* geoPoint
-* geoShape
-* ip
+-   geoPoint
+-   geoShape
+-   ip
 
 See [commit](https://github.com/RatkoR/laravel-crate.io/pull/10/commits/138289591e291aceb718e27a95123342be09b45b)
 and official crate [docs](https://crate.io/a/geo-shapes-in-crate/)
@@ -581,9 +632,9 @@ and official crate [docs](https://crate.io/a/geo-shapes-in-crate/)
 ### Tests
 
 There are two kinds of tests:
-+ Lexical tests
-+ Data tests
 
+-   Lexical tests
+-   Data tests
 
 ### Lexical tests
 
@@ -611,5 +662,6 @@ Conenction properties for tests are in `tests/DataTests/Config/database.php`
 file and can be changed for your setup.
 
 Data tests will create:
-+ `t_migration` table for test table migrations,
-+ `t_users` table for some dummy user data.
+
+-   `t_migration` table for test table migrations,
+-   `t_users` table for some dummy user data.

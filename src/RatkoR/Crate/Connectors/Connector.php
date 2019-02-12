@@ -29,7 +29,16 @@ class Connector extends BaseConnector implements ConnectorInterface {
      */
     public function createConnection($dsn, array $config, array $options)
     {
-        return new PDO($dsn, null, null, $options);
+        $username   = null;
+        $password   = null;
+        $authMethod = $config['auth_method'] ?: null;
+
+        if (in_array($authMethod, ['password', 'trust'])) {
+            $username = $config['username'] ?: null;
+            $password = $config['password'] ?: null;
+        }
+
+        return new PDO($dsn, $username, $password, $options);
     }
 
     /**
