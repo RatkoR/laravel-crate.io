@@ -139,7 +139,7 @@ Next, change default database connection to `"crate"`.
 
 This driver supports standard CrateDB auth methods `trust` and `password` via
 HTTP Basic Auth. To enable this, edit the `crate` config you created in the
-previous step, add the `auth_type` parameter of either `trust` or `password`,
+previous step, add the `auth_method` parameter of either `trust` or `password`,
 then add `username` and `password` with appropriate values for your system.
 
 For more information on CrateDB auth methods, see CrateDB's documentation about [Authentication Methods](https://crate.io/docs/crate/reference/en/latest/admin/auth/methods.html).
