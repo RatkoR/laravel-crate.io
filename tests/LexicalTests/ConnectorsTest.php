@@ -22,9 +22,9 @@ class ConnectorTest extends TestCase
         $connector = new Connector();
         $dsn = $this->invokeMethod($connector, 'getDsn', [['host'=>'127.0.0.1,10.0.0.1','port'=>4000]]);
 
-        $this->assertContains('crate:', $dsn);
-        $this->assertContains('127.0.0.1:4000', $dsn);
-        $this->assertContains('10.0.0.1:4000', $dsn);
+        $this->assertStringContainsString('crate:', $dsn);
+        $this->assertStringContainsString('127.0.0.1:4000', $dsn);
+        $this->assertStringContainsString('10.0.0.1:4000', $dsn);
     }
 
     /** @test */
@@ -33,9 +33,9 @@ class ConnectorTest extends TestCase
         $connector = new Connector();
         $dsn = $this->invokeMethod($connector, 'getDsn', [['host'=>'127.0.0.1:4200,10.0.0.1:4300','port'=>4000]]);
 
-        $this->assertContains('crate:', $dsn);
-        $this->assertContains('127.0.0.1:4200', $dsn);
-        $this->assertContains('10.0.0.1:4300', $dsn);
+        $this->assertStringContainsString('crate:', $dsn);
+        $this->assertStringContainsString('127.0.0.1:4200', $dsn);
+        $this->assertStringContainsString('10.0.0.1:4300', $dsn);
     }
 
     /** @test */
@@ -53,9 +53,9 @@ class ConnectorTest extends TestCase
         $connector = new Connector();
         $dsn = $this->invokeMethod($connector, 'getDsn', [['host'=>'127.0.0.1:4200,10.0.0.1:4300','port'=>4000, 'randomHosts'=>true]]);
 
-        $this->assertContains('crate:', $dsn);
-        $this->assertContains('127.0.0.1:4200', $dsn);
-        $this->assertContains('10.0.0.1:4300', $dsn);
+        $this->assertStringContainsString('crate:', $dsn);
+        $this->assertStringContainsString('127.0.0.1:4200', $dsn);
+        $this->assertStringContainsString('10.0.0.1:4300', $dsn);
     }
 
     /** @test */

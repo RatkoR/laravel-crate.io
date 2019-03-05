@@ -11,11 +11,7 @@ use StdClass;
 
 class DataTest extends TestCase {
 
-    public function tearDown()
-    {
-    }
-
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -301,13 +297,14 @@ class DataTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\QueryException
-     * @expectedExceptionMessage Cannot cast {"bar"='test'} to type string
      */
     public function it_throws_meaningful_error()
     {
         $foo = new stdClass();
         $foo->bar = 'test';
+
+        $this->expectException(\RatkoR\Crate\QueryException::class);
+        $this->expectExceptionMessage('Cannot cast {"bar"=\'test\'} to type string');
 
         User::create(['id'=>1,'name'=> $foo,'email'=>'user1@example.com']);
     }
