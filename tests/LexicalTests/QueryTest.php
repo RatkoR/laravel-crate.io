@@ -33,13 +33,13 @@ class QueryTest extends TestCase {
         return new Builder(m::mock('\Illuminate\Database\ConnectionInterface'), $grammar, $processor);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->setConnection();
         $this->builder = $this->setBuilder();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -53,10 +53,11 @@ class QueryTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     public function it_throws_exception_for_join()
     {
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $this->builder->select('*')
             ->from('users')
             ->join('contacts', 'users.id', '=', 'contacts.id')
@@ -65,37 +66,41 @@ class QueryTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     public function it_throws_exception_for_whereBetween()
     {
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $this->builder->select('*')->from('users')->whereBetween('id',[1,2]);
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     public function it_throws_exception_for_whereExists()
     {
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $this->builder->select('*')->from('users')->whereExists(function() {});
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     public function it_throws_exception_for_selectSub()
     {
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $this->builder->select('*')->from('users')->selectSub(function() {},'a');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     public function it_throws_exception_for_joins()
     {
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $this->builder->select('*')->from('users')->where('id', '=', 1);
         $this->builder->union($this->setBuilder()->select('*')->from('users')->where('id', '=', 2));
     }
@@ -258,11 +263,10 @@ class QueryTest extends TestCase {
         $this->assertEquals(null, $result);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testBuilderThrowsExpectedExceptionWithUndefinedMethod()
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->builder->noValidMethodHere();
     }
 }

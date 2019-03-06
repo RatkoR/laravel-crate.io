@@ -22,15 +22,10 @@ class BlueprintTest extends TestCase {
         return new Connection($connection, 'doc');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connection = $this->setConnection();
         $this->grammar = new Grammar();
-    }
-
-    protected function tearDown()
-    {
-
     }
 
     /** @test */
@@ -42,7 +37,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_string\" string INDEX using plain", $def[0]);
+        $this->assertStringContainsString("\"f_string\" string INDEX using plain", $def[0]);
     }
 
     /** @test */
@@ -54,7 +49,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_string\" string INDEX using plain", $def[0]);
+        $this->assertStringContainsString("\"f_string\" string INDEX using plain", $def[0]);
     }
 
     /** @test */
@@ -66,7 +61,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_string\" string INDEX OFF", $def[0]);
+        $this->assertStringContainsString("\"f_string\" string INDEX OFF", $def[0]);
     }
 
     /** @test */
@@ -78,7 +73,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertNotContains("fulltext", $def[0]);
+        $this->assertStringNotContainsString("fulltext", $def[0]);
     }
 
     /** @test */
@@ -92,8 +87,8 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains(", INDEX ind_f_string using fulltext(f_string)", $def[0]);
-        $this->assertNotContains("analyzer", $def[0]);
+        $this->assertStringContainsString(", INDEX ind_f_string using fulltext(f_string)", $def[0]);
+        $this->assertStringNotContainsString("analyzer", $def[0]);
     }
 
     /** @test */
@@ -108,8 +103,8 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains(", INDEX ind_f_string_1_f_string_2 using fulltext(f_string_1,f_string_2)", $def[0]);
-        $this->assertNotContains("analyzer", $def[0]);
+        $this->assertStringContainsString(", INDEX ind_f_string_1_f_string_2 using fulltext(f_string_1,f_string_2)", $def[0]);
+        $this->assertStringNotContainsString("analyzer", $def[0]);
     }
 
     /** @test */
@@ -123,7 +118,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains(", INDEX ind_f_string using fulltext(f_string) with (analyzer = 'english')", $def[0]);
+        $this->assertStringContainsString(", INDEX ind_f_string using fulltext(f_string) with (analyzer = 'english')", $def[0]);
     }
 
     /** @test */
@@ -137,7 +132,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertNotContains("PLAIN", $def[0]);
+        $this->assertStringNotContainsString("PLAIN", $def[0]);
     }
 
     /** @test */
@@ -151,86 +146,102 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertNotContains("OFF", $def[0]);
+        $this->assertStringNotContainsString("OFF", $def[0]);
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_drop_index()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $return = $blueprint->dropIndex();
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_binary_field()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->binary('f_binary');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_dropPrimary()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->dropPrimary();
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_dropUnique()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->dropUnique('index1');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_dropIndex()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->dropIndex('index1');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_dropForeign()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->dropForeign('index1');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_foreign_index()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->foreign('index1');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_unique_index()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->unique('index1');
     }
 
@@ -248,7 +259,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains(", primary key (f_id)", $def[0]);
+        $this->assertStringContainsString(", primary key (f_id)", $def[0]);
     }
 
     /**
@@ -266,7 +277,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains(", primary key (f_id,f2_id)", $def[0]);
+        $this->assertStringContainsString(", primary key (f_id,f2_id)", $def[0]);
     }
 
     /**
@@ -281,16 +292,17 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertNotContains("unique", $def[0]);
+        $this->assertStringNotContainsString("unique", $def[0]);
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_underscore_id_field()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
 
         $blueprint->create();
         $blueprint->integer('f_id');
@@ -301,11 +313,12 @@ class BlueprintTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_underscore_score_field()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
 
         $blueprint->create();
         $blueprint->integer('_score');
@@ -316,11 +329,12 @@ class BlueprintTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_underscore_version_field()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
 
         $blueprint->create();
         $blueprint->integer('nbItems');
@@ -331,33 +345,39 @@ class BlueprintTest extends TestCase {
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_dropColumn()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->dropColumn('f_string');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_renameColumn()
     {
         $blueprint = new Blueprint('testtable');
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $blueprint->renameColumn('f_string','t_to');
     }
 
     /**
      * @test
-     * @expectedException RatkoR\Crate\NotImplementedException
      */
     function it_throws_exception_for_changing_column()
     {
         $blueprint = new Blueprint('testtable');
 
         $blueprint->string('f_string', 50)->change();
+
+        $this->expectException(\RatkoR\Crate\NotImplementedException::class);
+
         $def = $blueprint->toSql($this->connection, $this->grammar);
     }
 
@@ -374,7 +394,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("create table \"testtable\" (\"f_id\" integer, \"f_string\" string )", $def[0]);
+        $this->assertStringContainsString("create table \"testtable\" (\"f_id\" integer, \"f_string\" string )", $def[0]);
     }
 
     /**
@@ -387,7 +407,7 @@ class BlueprintTest extends TestCase {
         $blueprint->drop();
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("drop table \"testtable\"", $def[0]);
+        $this->assertStringContainsString("drop table \"testtable\"", $def[0]);
     }
 
     /**
@@ -402,7 +422,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_object\" object", $def[0]);
+        $this->assertStringContainsString("\"f_object\" object", $def[0]);
     }
 
     /**
@@ -417,7 +437,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_object\" object dynamic", $def[0]);
+        $this->assertStringContainsString("\"f_object\" object dynamic", $def[0]);
     }
 
     /**
@@ -432,7 +452,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_object\" object strict", $def[0]);
+        $this->assertStringContainsString("\"f_object\" object strict", $def[0]);
     }
 
     /**
@@ -447,7 +467,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_object\" object as (f_date timestamp)", $def[0]);
+        $this->assertStringContainsString("\"f_object\" object as (f_date timestamp)", $def[0]);
     }
 
     /**
@@ -462,7 +482,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("\"f_array\" array (object as (age integer, name string) )", $def[0]);
+        $this->assertStringContainsString("\"f_array\" array (object as (age integer, name string) )", $def[0]);
     }
 
     /**
@@ -476,7 +496,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("alter table \"testtable\" add \"f_integer\" integer", $def[0]);
+        $this->assertStringContainsString("alter table \"testtable\" add \"f_integer\" integer", $def[0]);
     }
 
     /**
@@ -490,7 +510,7 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("create blob table", $def[0]);
+        $this->assertStringContainsString("create blob table", $def[0]);
     }
 
     /**
@@ -504,6 +524,6 @@ class BlueprintTest extends TestCase {
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
-        $this->assertContains("drop blob table", $def[0]);
+        $this->assertStringContainsString("drop blob table", $def[0]);
     }
 }
