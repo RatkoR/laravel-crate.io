@@ -38,6 +38,7 @@ open an issue ticket**.
 | 5.5.\*          | 5.0.\*       |
 | 5.6.\*          | 6.0.\*       |
 | 5.7.\*          | 7.0.\*       |
+| 5.8.\*          | 8.0.\*       |
 
 There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
 in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
@@ -51,12 +52,12 @@ Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5
 
 ### Installation
 
-Add a require to your composer.json (\*_laravel 5.7._ branch) :
+Add a require to your composer.json (\*_laravel 5.8._ branch) :
 
 ```json
 {
     "require": {
-        "ratkor/laravel-crate.io": "7.0.*"
+        "ratkor/laravel-crate.io": "8.0.*"
     }
 }
 ```
@@ -558,6 +559,13 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 8.0
+
+Updated project to work with laravel 5.8
+No new functionalities, only fixes compatibility issues with changes in L 5.8.
+
+Reworked test cases to work with phpunit 8 and 9.
 
 #### Version 7.0
 
