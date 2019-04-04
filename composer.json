@@ -29,5 +29,12 @@
         "classmap": [
             "tests/"
         ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RatkoR\\Crate\\CrateServiceProvider"
+            ]
+        }
     }
 }

@@ -54,6 +54,10 @@ Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5
 
 Add a require to your composer.json (\*_laravel 5.8._ branch) :
 
+```bash
+    composer require "ratkor/laravel-crate.io
+```
+
 ```json
 {
     "require": {
@@ -98,6 +102,8 @@ Use version 1 for **laravel 5.2.14** or less:
 }
 ```
 
+Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
+
 After composer downloads your package, you'll have to register this new Crate
 DB provider in Laravel. Open `config/app.php` and add:
 
@@ -107,7 +113,7 @@ DB provider in Laravel. Open `config/app.php` and add:
 
 to the list of `providers`.
 
-If you use laravel 5.1 or more, you can add:
+If you use laravel 5.1 or above, you can add:
 
 ```php
 RatkoR\Crate\CrateServiceProvider::class,
