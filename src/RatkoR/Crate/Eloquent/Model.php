@@ -18,10 +18,7 @@ class Model extends BaseModel
     * created_at, updated_at and similar fields are
     * timespamp fields, not datetime.
     */
-    public function getDateFormat()
-    {
-        return 'U';
-    }
+    public $dateFormat = 'U';
 
     /**
      * Get a new query builder instance for the connection.
