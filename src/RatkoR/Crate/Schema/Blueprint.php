@@ -319,7 +319,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      */
     public function increments($column)
     {
-        throw new NotImplementedException('Auto increments are not supported in Crate.io');
+
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $is_from_create_repository = collect($backtrace)->pluck('function')->contains('createRepository');
+
+        if(!$is_from_create_repository)
+            throw new NotImplementedException('Auto increments are not supported in Crate.io');
 
     }
 
