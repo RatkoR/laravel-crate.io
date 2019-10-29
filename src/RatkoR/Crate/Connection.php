@@ -28,8 +28,9 @@ class Connection extends \Illuminate\Database\Connection
      */
     public function setFetchMode($fetchMode, $fetchArgument = null, array $ctorArgs = [])
     {
-        if ($fetchMode !== \PDO::FETCH_ASSOC)
+        if ($fetchMode !== \PDO::FETCH_ASSOC) {
             $fetchMode = \PDO::FETCH_ASSOC;
+        }
 
         parent::setFetchMode($fetchMode, $fetchArgument, $ctorArgs);
     }
@@ -41,7 +42,9 @@ class Connection extends \Illuminate\Database\Connection
      */
     public function getSchemaBuilder()
     {
-        if (is_null($this->schemaGrammar)) { $this->useDefaultSchemaGrammar(); }
+        if ($this->schemaGrammar === null) {
+            $this->useDefaultSchemaGrammar();
+        }
 
         return new Builder($this);
     }
@@ -49,7 +52,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\Grammar
+     * @return \Illuminate\Database\Grammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -59,7 +62,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\Grammar
+     * @return \Illuminate\Database\Grammar
      */
     protected function getDefaultSchemaGrammar()
     {
@@ -79,7 +82,7 @@ class Connection extends \Illuminate\Database\Connection
     /**
      * Get the Doctrine DBAL driver.
      *
-     * @return \Doctrine\DBAL\Driver\PDOMySql\Driver
+     * @return \Crate\DBAL\Driver\PDOCrate\Driver
      */
     protected function getDoctrineDriver()
     {

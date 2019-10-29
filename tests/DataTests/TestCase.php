@@ -2,10 +2,7 @@
 
 namespace DataTests;
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use RatkoR\Crate\Schema\Blueprint;
 
 class TestCase extends \Orchestra\Testbench\TestCase {
 
@@ -41,4 +38,12 @@ class TestCase extends \Orchestra\Testbench\TestCase {
         $app['config']->set('cache.driver', 'array');
     }
 
+    /**
+     *
+     * @return void
+     */
+    public function forceCrateConsistency()
+    {
+        DB::connection('crate')->statement('REFRESH TABLE doc.t_users;');
+    }
 }
