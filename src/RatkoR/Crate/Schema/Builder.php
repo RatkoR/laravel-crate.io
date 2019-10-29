@@ -36,7 +36,7 @@ class Builder extends \Illuminate\Database\Schema\Builder
 
         $database = $this->connection->getDatabaseName();
 
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         $results = $this->connection->select($sql, array($database, $table));
 
@@ -53,8 +53,7 @@ class Builder extends \Illuminate\Database\Schema\Builder
      */
     protected function createBlueprint($table, Closure $callback = null)
     {
-        if (isset($this->resolver))
-        {
+        if (isset($this->resolver)) {
             return call_user_func($this->resolver, $table, $callback);
         }
 
@@ -66,7 +65,6 @@ class Builder extends \Illuminate\Database\Schema\Builder
      *
      * @param  string    $table
      * @param  \Closure  $callback
-     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function createBlob($table, Closure $callback)
     {

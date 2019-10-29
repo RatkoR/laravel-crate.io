@@ -135,8 +135,9 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      */
     protected function isFulltextIndex($options)
     {
-        if (!$options)
+        if (!$options) {
             return false; // default as plain index
+        }
 
         return stripos($options,'fulltext') !== false;
     }
@@ -167,6 +168,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $index
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function dropPrimary($index = null)
     {
@@ -178,6 +181,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $index
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function dropUnique($index)
     {
@@ -189,6 +194,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string  $index
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function dropForeign($index)
     {
@@ -200,6 +207,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @return Blueprint
+     *
+     * @throws NotImplementedException
      */
     public function dropIndex($columns = null)
     {
@@ -211,6 +220,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function dropColumn($columns)
     {
@@ -222,6 +233,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function renameColumn($from, $to)
     {
@@ -234,7 +247,6 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      * @param  string|array  $columns
      * @param  string  $name
      * @param  string|null  $algorithm
-     * @return \Illuminate\Support\Fluent
      */
     public function primary($columns, $name = null, $algorithm = null)
     {
@@ -247,7 +259,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      * @param  string|array  $columns
      * @param  string  $name
      * @param  string|null  $algorithm
-     * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function unique($columns, $name = null, $algorithm = null)
     {
@@ -259,7 +272,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string|array  $columns
      * @param  string  $name
-     * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function foreign($columns, $name = null)
     {
@@ -315,12 +329,12 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      * Auto incrementing is not supported in Crate
      *
      * @param  string  $column
-     * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function increments($column)
     {
         throw new NotImplementedException('Auto increments are not supported in Crate.io');
-
     }
 
     /**
@@ -328,6 +342,8 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  string  $column
      * @return \Illuminate\Support\Fluent
+     *
+     * @throws NotImplementedException
      */
     public function bigIncrements($column)
     {
@@ -339,21 +355,25 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @param  \Illuminate\Database\Schema\Grammars\Grammar  $grammar
      * @return void
+     *
+     * @throws NotImplementedException
      */
     protected function addImpliedCommands(Grammar $grammar)
     {
 
-        if (count($this->getAddedColumns()) > 0 && ! $this->creating()) {
+        if (! $this->creating() && count($this->getAddedColumns()) > 0) {
             array_unshift($this->commands, $this->createCommand('add'));
         }
 
-        if (count($this->getChangedColumns()) > 0 && ! $this->creating()) {
+        if (! $this->creating() && count($this->getChangedColumns()) > 0) {
             throw new NotImplementedException('Changing columns is not supported in Crate.io');
         }
     }
 
     /**
      * Do not allow creating of fields like _id, _score, _version
+     *
+     * @throws NotImplementedException
      */
     public function addColumn($type, $name, array $parameters = [])
     {
