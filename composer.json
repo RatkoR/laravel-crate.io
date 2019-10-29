@@ -1,12 +1,12 @@
 {
-    "name": "ratkor/laravel-crate.io",
+    "name": "julianmar/laravel-crate.io",
     "description": "Crate.io driver for Laravel 5",
     "license": "MIT",
     "keywords" : ["laravel5","laravel","crate.io","crate","pdo_crate"],
     "authors": [
         {
-            "name": "Ratko Rudic",
-            "email": "ratko@kramfid.org"
+            "name": "Julian Martin",
+            "email": "julian.martin@russmedia.com"
         }
     ],
     "require": {
