@@ -39,7 +39,8 @@ class DataTest extends TestCase {
             'f_array' => ['one','two','three','four'],
             'f_object' => $class,
         ]);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertInstanceOf('DataTests\Models\User', $user);
         $this->assertEquals(true, $user->exists);
@@ -63,7 +64,8 @@ class DataTest extends TestCase {
         User::create(['id'=>4,'name'=>'User 4','email'=>'user4@example.com']);
         User::create(['id'=>5,'name'=>'User 5','email'=>'user5@example.com']);
         $user = User::create(['id'=>6,'name'=>'User 6','email'=>'user6@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertInstanceOf('DataTests\Models\User', $user);
         $this->assertEquals(true, $user->exists);
@@ -77,7 +79,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
         User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $user = User::where('name', 'User 1')->first();
 
@@ -91,7 +94,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
         User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $user = User::find(2);
 
@@ -105,6 +109,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
         User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com','f_array'=>['one','two'], 'f_object' => ['subkey'=>'sub-key','subname'=>'sub-name']]);
+
+        $this->forceCrateConsistency();
         sleep(1);
 
         $user = User::find(2);
@@ -117,7 +123,8 @@ class DataTest extends TestCase {
         $this->assertEquals(true, $user->exists);
         $this->assertEquals('User X', $user->name);
 
-        sleep(1);
+        $this->forceCrateConsistency();
+
         $user = User::find(2);
 
         $this->assertInstanceOf('DataTests\Models\User', $user);
@@ -137,7 +144,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
         User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com']);
-        sleep(2);
+
+        $this->forceCrateConsistency();
 
         $users = User::all();
 
@@ -151,13 +159,15 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
         User::create(['id'=>2,'name'=>'User 2','email'=>'user2@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(2, User::count());
 
         $user = User::find(2);
         $user->delete();
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(1, User::count());
     }
@@ -177,7 +187,8 @@ class DataTest extends TestCase {
     public function it_checks_user_to_array()
     {
         User::create(['id'=>1,'name'=>'User 1','email'=>'user1@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $user = User::find(1);
         $array = $user->toArray();
@@ -201,7 +212,8 @@ class DataTest extends TestCase {
         User::create(['id'=>4,'name'=>'User b 4','email'=>'user4@example.com']);
         User::create(['id'=>5,'name'=>'User b 5','email'=>'user5@example.com']);
         User::create(['id'=>6,'name'=>'User b 6','email'=>'user6@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(5, User::count());
 
@@ -249,7 +261,8 @@ class DataTest extends TestCase {
         User::create(['id'=>4,'name'=>'User b 4','email'=>'user4@example.com']);
         User::create(['id'=>5,'name'=>'User b 5','email'=>'user5@example.com']);
         User::create(['id'=>6,'name'=>'User b 6','email'=>'user6@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(5, User::count());
 
@@ -264,7 +277,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>2,'name'=>'User a 2','email'=>'user2@example.com']);
         User::create(['id'=>3,'name'=>'User a 3','email'=>'user3@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(2, User::count());
 
@@ -282,7 +296,8 @@ class DataTest extends TestCase {
     {
         User::create(['id'=>2,'name'=>'User a 2','email'=>'user2@example.com']);
         User::create(['id'=>3,'name'=>'User a 3','email'=>'user3@example.com']);
-        sleep(1);
+
+        $this->forceCrateConsistency();
 
         $this->assertEquals(2, User::count());
 

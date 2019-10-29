@@ -13,7 +13,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      *
      * @var array
      */
-    protected $modifiers = array('Index');
+    protected $modifiers = ['Index'];
 
     /**
      * Get the SQL for index column modifier.
@@ -27,14 +27,17 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function modifyIndex(Blueprint $blueprint, Fluent $column)
     {
-        if (is_null($column->index))
+        if ($column->index === null) {
             return;
+        }
 
-        if (($column->index === true) || ($column->index === 'plain'))
+        if ($column->index === true || $column->index === 'plain') {
             return ' INDEX using plain';
+        }
 
-        if ($column->index === 'off')
+        if ($column->index === 'off') {
             return ' INDEX OFF';
+        }
     }
 
     /**
@@ -66,13 +69,15 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function getIndexName(array $attributes)
     {
-        if (isset($attributes['name']))
+        if (isset($attributes['name'])) {
             return $attributes['name'];
+        }
 
-        if (!is_array($attributes['columns']))
-            return 'ind_'.$attributes['columns'];
+        if (!is_array($attributes['columns'])) {
+            return 'ind_' . $attributes['columns'];
+        }
 
-        return 'ind_'.implode('_',$attributes['columns']);
+        return 'ind_' . implode('_',$attributes['columns']);
     }
 
     /**
@@ -84,10 +89,11 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function getFulltextAnalyzer($options)
     {
-        if (strpos($options,':') === false)
+        if (strpos($options,':') === false) {
             return null;
+        }
 
-        list($index, $analyzer) = explode(':', $options);
+        [$index, $analyzer] = explode(':', $options);
 
         return $analyzer;
     }
@@ -194,9 +200,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
         $indexes = implode(', ', $this->getIndexes($blueprint));
         $indexes = $indexes ? ", $indexes" : '';
 
-        $sql = 'create table '.$this->wrapTable($blueprint)." ($columns $indexes)";
-
-        return $sql;
+        return 'create table ' . $this->wrapTable($blueprint).  " ($columns $indexes)";
     }
 
     /**
@@ -212,7 +216,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileCreateBlob(Blueprint $blueprint, Fluent $command, Connection $connection)
     {
-        $sql = 'create blob table '.$this->wrapTable($blueprint)."";
+        $sql = 'create blob table ' . $this->wrapTable($blueprint) . "";
 
         return $sql;
     }
@@ -227,9 +231,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileDropBlob(Blueprint $blueprint, Fluent $command, Connection $connection)
     {
-        $sql = 'drop blob table '.$this->wrapTable($blueprint)."";
-
-        return $sql;
+        return 'drop blob table ' . $this->wrapTable($blueprint) . "";
     }
 
     /**
@@ -245,7 +247,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
 
         $columns = $this->prefixArray('add', $this->getColumns($blueprint));
 
-        return 'alter table '.$table.' '.implode(', ', $columns);
+        return 'alter table ' . $table . ' ' . implode(', ', $columns);
     }
 
     /**
@@ -306,7 +308,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileDrop(Blueprint $blueprint, Fluent $command)
     {
-        return 'drop table '.$this->wrapTable($blueprint);
+        return 'drop table ' . $this->wrapTable($blueprint);
     }
 
     /**
@@ -318,7 +320,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     public function compileDropIfExists(Blueprint $blueprint, Fluent $command)
     {
-        return 'drop table '.$this->wrapTable($blueprint);
+        return 'drop table ' . $this->wrapTable($blueprint);
     }
 
     /**
@@ -412,7 +414,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function typeObject(Fluent $column)
     {
-        return "object ".$column->attributes;
+        return 'object ' . $column->attributes;
     }
 
     /**
@@ -423,7 +425,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function typeChar(Fluent $column)
     {
-        return "string";
+        return 'string';
     }
 
     /**
@@ -434,7 +436,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function typeString(Fluent $column)
     {
-        return "string";
+        return 'string';
     }
 
     /**
@@ -555,7 +557,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function typeDecimal(Fluent $column)
     {
-        return "float";
+        return 'float';
     }
 
     /**
@@ -577,7 +579,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      */
     protected function typeEnum(Fluent $column)
     {
-        return "";
+        return '';
     }
 
     /**

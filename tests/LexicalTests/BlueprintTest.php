@@ -12,7 +12,8 @@ use RatkoR\Crate\NotImplementedException;
 
 class BlueprintTest extends TestCase {
 
-    private $connection = null;
+    private $connection;
+    private $grammar;
 
     private function setConnection()
     {
