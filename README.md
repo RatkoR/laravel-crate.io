@@ -23,17 +23,16 @@ unit tests and the driver seems ok. We use id as a caching layer in front
 of our DB servers. Crate is insanely fast (Elasticsearch) and offloads our
 DB servers a lot.
 
-Still, it's still early in development, so **if you find any bugs, please
-open an issue ticket**.
+**if you find any bugs, please open an issue ticket**.
 
 ### Installation
 
-Laravel 5.5 till 6 is supported
+Laravel 5.5 & 6 is supported. Version tagged with 9.* (and higher) require **php 7.2**!
 
 Add a require to your composer.json :
 
 ```bash
-    composer require julianmar/laravel-crate.io
+    composer require ratkor/laravel-crate.io
 ```
 
 Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
@@ -484,6 +483,11 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 9.0
+
+Thanks to [Julian Martin](https://github.com/JulianMar) this project now works with
+laravel 6.X. PHP 7.2 is now mandatory (it is mandatory for Laravel 6 also).
 
 #### Version 8.0
 
