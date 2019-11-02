@@ -1,6 +1,4 @@
-## Crate.io driver for Laravel 5
-
-This is a fork of [this](https://github.com/RatkoR/laravel-crate.io) repo  
+## Crate.io driver for Laravel
 
 This is an Eloquent and Query builder support for Crate.io. Extends
 the original Laravel API with Crate PDO driver.
