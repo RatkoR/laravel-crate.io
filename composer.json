@@ -1,24 +1,29 @@
 {
     "name": "ratkor/laravel-crate.io",
-    "description": "Crate.io driver for Laravel 5",
+    "description": "Crate.io driver for Laravel",
     "license": "MIT",
     "keywords" : ["laravel5","laravel","crate.io","crate","pdo_crate"],
     "authors": [
         {
             "name": "Ratko Rudic",
             "email": "ratko@kramfid.org"
+        },
+        {
+            "name": "Julian Martin",
+            "email": "julian.martin@russmedia.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "5.8.*",
-        "illuminate/database": "5.8.*",
-        "crate/crate-dbal": "*"
+        "php": ">7.2",
+        "ext-pdo":  "*",
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "crate/crate-dbal": "~1.1.0"
     },
     "require-dev": {
-        "mockery/mockery": "*",
-        "phpunit/phpunit": "*",
-        "orchestra/testbench": "*"
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^8.0",
+        "orchestra/testbench": "^3.8.0|^4.0"
     },
     "autoload": {
         "psr-0": {
