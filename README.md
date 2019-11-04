@@ -1,7 +1,5 @@
 ## Crate.io driver for Laravel 5
 
-This is a fork of (this)[https://github.com/RatkoR/laravel-crate.io] repo  
-
 This is an Eloquent and Query builder support for Crate.io. Extends
 the original Laravel API with Crate PDO driver.
 
@@ -26,14 +24,74 @@ DB servers a lot.
 Still, it's still early in development, so **if you find any bugs, please
 open an issue ticket**.
 
+### Laravel version Compatibility
+
+| Laravel         | Package      |
+| :-------------- | :----------- |
+| 5.0.x           | 1.\*         |
+| 5.1.x           | 1.\*         |
+| 5.2.0 - 5.2.14  | 1.\*         |
+| 5.2.15 - 5.2.19 | 2.0.\*       |
+| 5.2.20 - 5.2.\* | 2.1.\*       |
+| 5.3.\*          | 3.0._, 3.1._ |
+| 5.4.\*          | 4.0.\*       |
+| 5.5.\*          | 5.0.\*       |
+| 5.6.\*          | 6.0.\*       |
+| 5.7.\*          | 7.0.\*       |
+| 5.8.\*          | 8.0.\*       |
+
+There was a [change](https://github.com/laravel/framework/commit/83316753bbae495cc29c96926b14c5437e0d8879)
+in laravel 5.2.20 that broke migrations. Please upgrade to a more recent
+laravel and latest version of this driver if it affects you (or use older
+driver).
+
+Laravel 5.3 changed some Database Schema methods so you'll need to use
+version 3.0 to stay compatible.
+
+Laravel 5.4 changed `Connection` object so you'll have to use v.4 with laravel 5.4.
+
 ### Installation
 
-Laravel 5.5 till 6 is supported
-
-Add a require to your composer.json :
+Add a require to your composer.json (\*_laravel 5.8._ branch) :	Laravel 5.5 till 6 is supported
 
 ```bash
-    composer require julianmar/laravel-crate.io
+    composer require "ratkor/laravel-crate.io
+```
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "8.0.*"
+    }
+}
+```
+and run `composer update`.
+Add a require to your composer.json (**laravel 5.3** branch) :
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "3.1.*"
+    }
+}
+```
+and run `composer update`.
+For **laravel 5.2.15** (and any version higher in the 5.2 branch) use 2.\* version :
+```json
+{
+    "require": {
+        "ratkor/laravel-crate.io": "2.*"
+    }
+}
+```
+and run `composer update`.
+
+Use version 1 for **laravel 5.2.14** or less:	Add a require to your composer.json :
+
+```json	```bash
+{	    composer require julianmar/laravel-crate.io
+    "require": {
+        "ratkor/laravel-crate.io": "1.*"
+    }
+}
 ```
 
 Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
