@@ -2,6 +2,7 @@
 
 namespace LexicalTests;
 
+use Doctrine\DBAL\Schema\Schema;
 use LexicalTests\TestCase;
 use Illuminate\Support\Fluent;
 use RatkoR\Crate\Schema\Blueprint;
@@ -503,6 +504,42 @@ class BlueprintTest extends TestCase {
     /**
      * @test
      */
+    function it_generates_generated_colums()
+    {
+        $blueprint = new Blueprint('testtable', function($table) {
+            $table->double('dividend');
+            $table->double('divisor');
+            $table->generated('quotient')->alwaysAs('dividend / divisor');
+        });
+
+        $def = $blueprint->toSql($this->connection, $this->grammar);
+
+        $this->assertStringContainsString("\"quotient\" generated ALWAYS AS (dividend / divisor)", $def[0]);
+    }
+
+    /**
+     * @test
+     */
+    function it_adds_partition_statement_to_table()
+    {
+        $blueprint = new Blueprint('testtable', function($table) {
+            $table->double('dividend');
+            $table->double('divisor');
+            $table->generated('quotient')->alwaysAs('dividend / divisor');
+
+            $table->partitionedBy('quotient');
+        });
+
+        $blueprint->create();
+
+        $def = $blueprint->toSql($this->connection, $this->grammar);
+
+        $this->assertStringContainsString("PARTITIONED BY (quotient)", $def[0]);
+    }
+
+    /**
+     * @test
+     */
     function it_creates_a_blob_table()
     {
         $blueprint = new Blueprint('testtable');
@@ -527,4 +564,5 @@ class BlueprintTest extends TestCase {
 
         $this->assertStringContainsString("drop blob table", $def[0]);
     }
+
 }
