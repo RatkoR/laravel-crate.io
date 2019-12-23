@@ -154,12 +154,14 @@ Big things that are **not** supported are:
 -   dropping, renaming columns (adding fields works)
 -   naming columns like _ id, _ version, \_ score - these are restricted, crate uses it [internally](https://crate.io/docs/stable/sql/ddl.html)
 
-Crate specific stuff that was added is:
+Crate specific stuff that were added are:
 
 -   object type
 -   array type
 -   index off, index plain
 -   fulltext indexes over single or multiple fields w/o analyzers
+-   [table partitioning](https://crate.io/docs/crate/reference/en/latest/general/ddl/partitioned-tables.html)
+-   [generated columns](https://crate.io/docs/crate/reference/en/latest/general/ddl/generated-columns.html#sql-ddl-generated-columns)
 
 Also, `Article::truncate()` has been changed to silently use `delete from article`;
 
@@ -481,6 +483,11 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 9.1
+
+Support for table patitioning and generated tables (pull #34).
+Updated crate-dbal to version 2.0 (pull #33).
 
 #### Version 9.0
 

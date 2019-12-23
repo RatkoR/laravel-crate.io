@@ -13,7 +13,7 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      *
      * @var array
      */
-    protected $modifiers = ['Index'];
+    protected $modifiers = ['Index', 'AlwaysAs'];
 
     /**
      * Get the SQL for index column modifier.
@@ -38,6 +38,25 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
         if ($column->index === 'off') {
             return ' INDEX OFF';
         }
+    }
+
+    /**
+     * Get the SQL for alwaysAs column modifier.
+     *
+     * "INDEX OFF" and "INDEX USING plain" are attached to fields.
+     * Fulltext indexes are done as named index fields.
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string|null
+     */
+    protected function modifyAlwaysAs(Blueprint $blueprint, Fluent $column)
+    {
+        if ($column->alwaysAs === null) {
+            return;
+        }
+
+        return " ALWAYS AS ({$column->alwaysAs})";
     }
 
     /**
@@ -200,7 +219,26 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
         $indexes = implode(', ', $this->getIndexes($blueprint));
         $indexes = $indexes ? ", $indexes" : '';
 
-        return 'create table ' . $this->wrapTable($blueprint).  " ($columns $indexes)";
+        $sql = 'create table ' . $this->wrapTable($blueprint) .  " ($columns $indexes) ";
+
+        return $this->compilePartitionedBy($sql, $blueprint);
+    }
+
+    /**
+     * Compile PartionendBy .
+     *
+     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
+     *
+     * @return string
+     */
+    public function compilePartitionedBy($sql, $blueprint)
+    {
+        $partitionedBy = $blueprint->getPartitionedBy();
+        if ($partitionedBy !== []) {
+            return $sql . ' PARTITIONED BY (' . implode(', ', $blueprint->getPartitionedBy()) . ')';
+        }
+
+        return $sql;
     }
 
     /**
@@ -679,5 +717,16 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
     protected function typeIp(Fluent $column)
     {
         return 'ip';
+    }
+
+    /**
+     * Create the column definition for a generated type.
+     *
+     * @param  \Illuminate\Support\Fluent  $column
+     * @return string
+     */
+    protected function typeGenerated(Fluent $column)
+    {
+        return 'generated';
     }
 }

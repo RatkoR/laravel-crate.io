@@ -5,6 +5,7 @@ namespace RatkoR\Crate\Schema;
 use Closure;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Grammars\Grammar;
+use Illuminate\Support\Arr;
 use RatkoR\Crate\NotImplementedException;
 
 class Blueprint extends \Illuminate\Database\Schema\Blueprint {
@@ -26,6 +27,14 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     protected $indexes = [];
 
     /**
+     * This Array is used to partition the Crate Table into multiple parts.
+     * This is a advanced feature in create and should be used with caution
+     *
+     * @var array
+     */
+    protected $partitionedBy = [];
+
+    /**
      * Returns all fulltext indexes.
      *
      * @return array
@@ -33,6 +42,26 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     public function getIndexes()
     {
         return $this->indexes;
+    }
+
+    /**
+     * set PartionendBy for Table
+     *
+     * @param  string|array  $columns
+     */
+    public function partitionedBy($colums)
+    {
+        $this->partitionedBy = Arr::wrap($colums);
+    }
+
+    /**
+     * Returns all fulltext indexes.
+     *
+     * @return array
+     */
+    public function getPartitionedBy()
+    {
+        return $this->partitionedBy;
     }
 
     /**
@@ -124,6 +153,17 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
     public function ip($column)
     {
         return $this->addColumn('ip', $column);
+    }
+
+    /**
+     * generated field
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function generated($column)
+    {
+        return $this->addColumn('generated', $column);
     }
 
     /**
