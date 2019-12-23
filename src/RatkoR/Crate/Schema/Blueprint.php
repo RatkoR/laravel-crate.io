@@ -32,7 +32,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      *
      * @var array
      */
-    protected $partionedBy = [];
+    protected $partitionedBy = [];
 
     /**
      * Returns all fulltext indexes.
@@ -51,7 +51,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      */
     public function partitionedBy($colums)
     {
-        $this->partionedBy = Arr::wrap($colums);
+        $this->partitionedBy = Arr::wrap($colums);
     }
 
     /**
@@ -61,7 +61,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      */
     public function getPartitionedBy()
     {
-        return $this->partionedBy;
+        return $this->partitionedBy;
     }
 
     /**
