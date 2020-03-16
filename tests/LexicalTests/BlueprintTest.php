@@ -10,7 +10,8 @@ use RatkoR\Crate\Schema\Grammars\Grammar;
 use RatkoR\Crate\Connection;
 use RatkoR\Crate\NotImplementedException;
 
-class BlueprintTest extends TestCase {
+class BlueprintTest extends TestCase
+{
 
     private $connection;
     private $grammar;
@@ -18,7 +19,7 @@ class BlueprintTest extends TestCase {
     private function setConnection()
     {
         $connector = new Connector();
-        $connection = $connector->connect(['host'=>'localhost','20000']);
+        $connection = $connector->connect(['host' => 'localhost', '20000']);
 
         return new Connection($connection, 'doc');
     }
@@ -32,7 +33,7 @@ class BlueprintTest extends TestCase {
     /** @test */
     function it_adds_plain_index_data_to_column_if_index_is_not_specified()
     {
-        $blueprint = new Blueprint('testtable', function($table) {
+        $blueprint = new Blueprint('testtable', function ($table) {
             $table->string('f_string')->index();
         });
 
@@ -44,7 +45,7 @@ class BlueprintTest extends TestCase {
     /** @test */
     function it_adds_plain_index_data_to_column()
     {
-        $blueprint = new Blueprint('testtable', function($table) {
+        $blueprint = new Blueprint('testtable', function ($table) {
             $table->string('f_string')->index('plain');
         });
 
@@ -56,7 +57,7 @@ class BlueprintTest extends TestCase {
     /** @test */
     function it_adds_off_index_data_to_column()
     {
-        $blueprint = new Blueprint('testtable', function($table) {
+        $blueprint = new Blueprint('testtable', function ($table) {
             $table->string('f_string')->index('off');
         });
 
@@ -68,7 +69,7 @@ class BlueprintTest extends TestCase {
     /** @test */
     function it_does_not_add_fulltext_index_data_to_column()
     {
-        $blueprint = new Blueprint('testtable', function($table) {
+        $blueprint = new Blueprint('testtable', function ($table) {
             $table->string('f_string')->index('fulltext');
         });
 
@@ -84,7 +85,7 @@ class BlueprintTest extends TestCase {
 
         $blueprint->create();
         $blueprint->string('f_string');
-        $blueprint->index('f_string','fulltext');
+        $blueprint->index('f_string', 'fulltext');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -100,7 +101,7 @@ class BlueprintTest extends TestCase {
         $blueprint->create();
         $blueprint->string('f_string_1');
         $blueprint->string('f_string_2');
-        $blueprint->index(['f_string_1','f_string_2'],'fulltext');
+        $blueprint->index(['f_string_1', 'f_string_2'], 'fulltext');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -115,7 +116,7 @@ class BlueprintTest extends TestCase {
 
         $blueprint->create();
         $blueprint->string('f_string');
-        $blueprint->index('f_string','fulltext:english');
+        $blueprint->index('f_string', 'fulltext:english');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -143,7 +144,7 @@ class BlueprintTest extends TestCase {
 
         $blueprint->create();
         $blueprint->string('f_string');
-        $blueprint->index('f_string','off');
+        $blueprint->index('f_string', 'off');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -274,7 +275,7 @@ class BlueprintTest extends TestCase {
         $blueprint->integer('f_id');
         $blueprint->integer('f2_id');
 
-        $blueprint->primary(['f_id','f2_id']);
+        $blueprint->primary(['f_id', 'f2_id']);
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -365,7 +366,7 @@ class BlueprintTest extends TestCase {
 
         $this->expectException(\RatkoR\Crate\NotImplementedException::class);
 
-        $blueprint->renameColumn('f_string','t_to');
+        $blueprint->renameColumn('f_string', 't_to');
     }
 
     /**
@@ -434,7 +435,7 @@ class BlueprintTest extends TestCase {
         $blueprint = new Blueprint('testtable');
 
         $blueprint->create();
-        $blueprint->objectField('f_object','dynamic');
+        $blueprint->objectField('f_object', 'dynamic');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -449,7 +450,7 @@ class BlueprintTest extends TestCase {
         $blueprint = new Blueprint('testtable');
 
         $blueprint->create();
-        $blueprint->objectField('f_object','strict');
+        $blueprint->objectField('f_object', 'strict');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -464,7 +465,7 @@ class BlueprintTest extends TestCase {
         $blueprint = new Blueprint('testtable');
 
         $blueprint->create();
-        $blueprint->objectField('f_object','as (f_date timestamp)');
+        $blueprint->objectField('f_object', 'as (f_date timestamp)');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
@@ -479,7 +480,7 @@ class BlueprintTest extends TestCase {
         $blueprint = new Blueprint('testtable');
 
         $blueprint->create();
-        $blueprint->arrayField('f_array','object as (age integer, name string');
+        $blueprint->arrayField('f_array', 'object as (age integer, name string');
 
         $def = $blueprint->toSql($this->connection, $this->grammar);
 
