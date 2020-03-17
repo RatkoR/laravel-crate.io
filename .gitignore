@@ -6,4 +6,5 @@ composer.phar
 *.sublime-workspace
 *.project
 .idea/
+composer.lock
 

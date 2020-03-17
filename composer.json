@@ -16,8 +16,8 @@
     "require": {
         "php": "^7.2.5",
         "ext-pdo": "*",
-        "illuminate/support": "~5.8|^6.0|^7.0",
-        "illuminate/database": "~5.8|^6.0|^7.0",
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+        "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
         "crate/crate-dbal": "~1.1.0|^2.0"
     },
     "require-dev": {
