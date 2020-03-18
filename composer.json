@@ -14,16 +14,16 @@
         }
     ],
     "require": {
-        "php": ">7.2",
+        "php": "^7.2.5",
         "ext-pdo": "*",
-        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
-        "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
-        "crate/crate-dbal": "^2.0.0"
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+        "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+        "crate/crate-dbal": "~1.1.0|^2.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^8.0",
-        "orchestra/testbench": "^3.8.0|^4.0"
+        "phpunit/phpunit": "^9.0",
+        "orchestra/testbench": "^3.8|^4.0|^5.0"
     },
     "autoload": {
         "psr-0": {
