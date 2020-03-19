@@ -25,7 +25,7 @@ DB servers a lot.
 
 ### Installation
 
-Laravel 5.5 & 6 is supported. Version tagged with 9.* (and higher) require **php 7.2**!
+Laravel 5.5, 6, 7 are supported. Version tagged with 9.* (and higher) require **php 7.2.5**!
 
 Add a require to your composer.json :
 
