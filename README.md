@@ -484,6 +484,24 @@ $article->delete();
 
 ### Changes
 
+#### Version 10
+
+Updated project to work with laravel 8.
+
+**Note**: crate-pdo now allows saving of objects into string fields.
+
+So if you have a User object with `name` field set as string and if you do:
+
+```
+$foo = new stdClass();
+$foo->bar = 'test';
+User::create(['id'=>1,'name'=> $foo]);
+```
+
+it will insert a user with object `{"bar": "test"}` stored in 'name' field. I don't know if it's a feature or a bug.. I'll leave it to the developers to use it or not.
+
+`Connection::recordsHaveBeenModified()` is now properly called for all laravels that have it defined.
+
 #### Version 9.1
 
 Support for table patitioning and generated tables (pull #34).
@@ -596,7 +614,10 @@ all next selects that query for this changes. So we have couple of
 `sleep(1)` statements in test code.
 
 Running data tests for the first time will probably fail as `migration`
-table will not exist yet. Try rerunning test and it will proceed ok.
+table will not exist yet. Try rerunning test and it will proceed ok. Oh, and
+you'll have to change `$table->increment('id')` to `$table->integer('id');` in
+`DatabaseMigrationRepository::createRepository` or it will break as
+increments are not supported.
 
 Conenction properties for tests are in `tests/DataTests/Config/database.php`
 file and can be changed for your setup.
