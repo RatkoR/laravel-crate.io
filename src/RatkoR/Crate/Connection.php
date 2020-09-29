@@ -153,7 +153,13 @@ class Connection extends \Illuminate\Database\Connection
             $this->bindParameters($statement, $bindings);
             $statement->execute();
 
-            return $statement->rowCount();
+            $count = $statement->rowCount();
+
+            if (method_exists($this, 'recordsHaveBeenModified')) {
+                $this->recordsHaveBeenModified($count > 0);
+            }
+
+            return $count;
         });
     }
 
