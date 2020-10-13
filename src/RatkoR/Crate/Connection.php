@@ -118,6 +118,10 @@ class Connection extends \Illuminate\Database\Connection
 
             $this->bindParameters($stmt, $bindings);
 
+            if (method_exists($this, 'recordsHaveBeenModified')) {
+                $this->recordsHaveBeenModified();
+            }
+
             return $stmt->execute();
         });
     }
@@ -149,7 +153,13 @@ class Connection extends \Illuminate\Database\Connection
             $this->bindParameters($statement, $bindings);
             $statement->execute();
 
-            return $statement->rowCount();
+            $count = $statement->rowCount();
+
+            if (method_exists($this, 'recordsHaveBeenModified')) {
+                $this->recordsHaveBeenModified($count > 0);
+            }
+
+            return $count;
         });
     }
 
@@ -215,7 +225,7 @@ class Connection extends \Illuminate\Database\Connection
      *
      * We're overriding runQueryCallback to trigger our own
      * version of QueryException.
-     * 
+     *
      * @param  string    $query
      * @param  array     $bindings
      * @param  \Closure  $callback
