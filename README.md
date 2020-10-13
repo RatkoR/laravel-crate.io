@@ -490,7 +490,7 @@ Updated project to work with laravel 8.
 
 **Note**: crate-pdo now allows saving of objects into string fields.
 
-So if you have a User object with `name` field set as string and if you do:
+If you have a User object with `name` field set as string and if you do:
 
 ```
 $foo = new stdClass();
@@ -498,7 +498,7 @@ $foo->bar = 'test';
 User::create(['id'=>1,'name'=> $foo]);
 ```
 
-it will insert a user with object `{"bar": "test"}` stored in 'name' field. I don't know if it's a feature or a bug.. I'll leave it to the developers to use it or not.
+it will do an insert with 'name' field set to object `{"bar": "test"}`. I don't know if it's a feature or a bug.. I'll leave it to the developers to use it or not.
 
 `Connection::recordsHaveBeenModified()` is now properly called for all laravels that have it defined.
 
