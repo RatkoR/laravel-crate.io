@@ -18,7 +18,7 @@
         "ext-pdo": "*",
         "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
         "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
-        "crate/crate-dbal": "^3.0.0"
+        "crate/crate-dbal": "~1.1.0|^2.0|^3.0.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
