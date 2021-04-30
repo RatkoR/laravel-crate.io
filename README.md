@@ -38,6 +38,12 @@ Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add
 You'll have to install crate.io server, of course. See installation
 instructions on their site.
 
+#### PHP 8
+
+Version 10.1 supports PHP 8.
+
+We run tests on ubuntu with PHP 8.0, crate-dbal 3 and phpunit 9.5. All tests passed ok.
+
 ### Configuration
 
 Open `config/database.php` and add new crate database connection (with
@@ -483,6 +489,11 @@ $article->delete();
 ```
 
 ### Changes
+
+#### Version 10.1
+
+PHP 8 support added. All existing tests pass when run on machine with php 8
+installed. No changes were needed in code (only composer.json was updated).
 
 #### Version 10
 
