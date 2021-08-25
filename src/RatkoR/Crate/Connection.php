@@ -14,27 +14,6 @@ use RatkoR\Crate\QueryException as QueryException;
 
 class Connection extends \Illuminate\Database\Connection
 {
-    protected $fetchMode = PDO::FETCH_ASSOC;
-
-    /**
-     * Set the default fetch mode for the connection.
-     *
-     * NOTE! Crate cannot use PDO::FETCH_CLASS fetch mode, so
-     * 	we silently  change it to PDO::FETCH_ASSOC
-     * 	https://crate.io/docs/reference/pdo/usage.html#fetch-modes
-     *
-     * @param  int  $fetchMode
-     * @return int
-     */
-    public function setFetchMode($fetchMode, $fetchArgument = null, array $ctorArgs = [])
-    {
-        if ($fetchMode !== \PDO::FETCH_ASSOC) {
-            $fetchMode = \PDO::FETCH_ASSOC;
-        }
-
-        parent::setFetchMode($fetchMode, $fetchArgument, $ctorArgs);
-    }
-
     /**
      * Get a schema builder instance for the connection.
      *
