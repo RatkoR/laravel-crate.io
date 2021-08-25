@@ -285,7 +285,6 @@ class DataTest extends TestCase {
         $user_2 = DB::select('select * from t_users where id = ?', array(2));
         $user_3 = DB::select('select * from t_users where id = ?', array(3));
 
-        dump($user_2);
         $this->assertEquals(2, $user_2[0]->id);
         $this->assertEquals(3, $user_3[0]->id);
         $this->assertEquals('user2@example.com', $user_2[0]->email);
