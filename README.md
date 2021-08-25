@@ -16,6 +16,8 @@ Laravel-crate.io project uses those adapters when connecting to Crate DB.
 
 ### Project status
 
+**!!!! WARNING:** There's a breaking change in version 11. See changelog below.
+
 Laravel-crate.io is used in our internal projects. We did a bunch of
 unit tests and the driver seems ok. We use id as a caching layer in front
 of our DB servers. Crate is insanely fast (Elasticsearch) and offloads our
@@ -132,14 +134,6 @@ randomization, add a `randomHosts` parameter and set it to `false`:
 ),
 ```
 
-**Note on PDO::FETCH_CLASS**
-
-Crate doesn't support PDO::FETCH_CLASS so we silently change it to PDO::FETCH_ASSOC.
-This happens only for Crate connections, your normal MySQL connections will still use FETCH_CLASS.
-
-See more about fetch types on their [github](https://github.com/crate/crate-pdo) or
-[crate](https://crate.io/docs/reference/pdo/usage.html#fetch-modes) page.
-
 ### What works and what doesn't
 
 Crate.io supports many of the SQL statements, but not all of them. Be sure to
@@ -226,7 +220,7 @@ colums, just digest and last_moified. And even these are created automatically.
 An example of create blob schema is:
 
 ```php
-        Schema::createBlob('myblob');
+    Schema::createBlob('myblob');
 ```
 
 _There is no need for the callback parameter (the second parameter in createBlob() which
@@ -488,7 +482,15 @@ $article = Article::find(1);
 $article->delete();
 ```
 
-### Changes
+### Changelog
+
+#### Version 11
+
+**BREAKING CHANGE**
+
+Version 11 changes fetch method from `PDO::FETCH_ASSOC` to laravel's default
+`PDO::FETCH_OBJ`.
+
 
 #### Version 10.1
 
