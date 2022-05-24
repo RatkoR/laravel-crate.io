@@ -2,11 +2,9 @@
 
 namespace DataTests;
 
-use DataTests\Seeds\TuserTableSeeder;
 use DataTests\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use StdClass;
 
 class DataTest extends TestCase {
@@ -14,6 +12,12 @@ class DataTest extends TestCase {
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app->singleton('migration.repository', function ($app) {
+            $table = $app['config']['database.migrations'];
+
+            return new \DataTests\Fixture\DatabaseMigrationRepository($app['db'], $table);
+        });
 
         Artisan::call('migrate', [
             '--database' => 'crate',

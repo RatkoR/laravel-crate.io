@@ -2,6 +2,9 @@
 
 namespace DataTests;
 
+use DataTests\Fixture\DatabaseMigrationRepository;
+use Illuminate\Database\Migrations\MigrationRepositoryInterface;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 
 class TestCase extends \Orchestra\Testbench\TestCase {
@@ -22,7 +25,7 @@ class TestCase extends \Orchestra\Testbench\TestCase {
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application    $app
+     * @param  Application    $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
