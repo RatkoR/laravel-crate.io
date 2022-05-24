@@ -27,7 +27,7 @@ DB servers a lot.
 
 ### Installation
 
-Laravel 5.5, 6, 7, 8 are supported. Version tagged with 9.* (and higher) require **php 7.2.5**!
+Laravel 5.5, 6, 7, 8 and 9 are supported.
 
 Add a require to your composer.json :
 
@@ -40,11 +40,14 @@ Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add
 You'll have to install crate.io server, of course. See installation
 instructions on their site.
 
-#### PHP 8
+#### PHP
 
-Version 10.1 supports PHP 8.
+Version 12 supports PHP 8.1.
 
+Version 10.1 supports PHP 8.<br>
 We run tests on ubuntu with PHP 8.0, crate-dbal 3 and phpunit 9.5. All tests passed ok.
+
+Versions tagged with 9 and higher require **php 7.2.5**!
 
 ### Configuration
 
@@ -308,7 +311,7 @@ for objects. Examples would be:
 
 ```php
 $table->objectField('my_object_1','as (f_date timestamp)');
-$table->objectField('my_object_2','as (object(dynamic) as (name string, birthday timestamp)');
+$table->objectField('my_object_2','(dynamic) as (name string, birthday timestamp)');
 ```
 
 **Add an 'array' field:**
@@ -483,6 +486,10 @@ $article->delete();
 ```
 
 ### Changelog
+
+#### Version 12
+
+Support for laravel 9 (thanks to [Julian Martin](https://github.com/JulianMar))
 
 #### Version 11
 
