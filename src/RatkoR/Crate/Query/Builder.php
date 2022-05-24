@@ -53,12 +53,12 @@ class Builder extends BaseBuilder
      * Not available in crate.io
      *
      * @param  string  $column
-     * @param  array   $values
+     * @param  iterable   $values
      * @param  string  $boolean
      * @param  bool  $not
      * @return $this
      */
-    public function whereBetween($column, array $values, $boolean = 'and', $not = false)
+    public function whereBetween($column, iterable $values, $boolean = 'and', $not = false)
     {
         throw new NotImplementedException('whereBetween is not implemented in Crate');
     }
