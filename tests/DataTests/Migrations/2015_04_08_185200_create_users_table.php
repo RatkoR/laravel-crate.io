@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration {
      */
     public function up()
     {
+        if (Schema::hasTable('t_users')) return;
         Schema::create('t_users', function(Blueprint $table)
         {
             $table->integer('id');
