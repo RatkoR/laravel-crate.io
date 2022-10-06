@@ -646,3 +646,11 @@ Data tests will create:
 
 -   `t_migration` table for test table migrations,
 -   `t_users` table for some dummy user data.
+
+To invoke the test suite, run:
+```shell
+git clone https://github.com/RatkoR/laravel-crate.io
+cd laravel-crate.io
+composer install
+./run-tests.sh
+```
