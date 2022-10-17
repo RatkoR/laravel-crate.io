@@ -9,15 +9,23 @@ use StdClass;
 
 class DataTest extends TestCase {
 
+    protected static $testNb = 0;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        static::$testNb++;
 
         $this->app->singleton('migration.repository', function ($app) {
             $table = $app['config']['database.migrations'];
 
             return new \DataTests\Fixture\DatabaseMigrationRepository($app['db'], $table);
         });
+
+        if (static::$testNb === 2) {
+            sleep(1);
+        }
 
         Artisan::call('migrate', [
             '--database' => 'crate',
