@@ -4,7 +4,7 @@ namespace RatkoR\Crate\Connectors;
 
 use Illuminate\Database\Connectors\Connector AS BaseConnector;
 use Illuminate\Database\Connectors\ConnectorInterface;
-use Crate\PDO\PDO;
+use Crate\PDO\PDOCrateDB;
 
 class Connector extends BaseConnector implements ConnectorInterface {
 
@@ -13,8 +13,8 @@ class Connector extends BaseConnector implements ConnectorInterface {
      * See: https://github.com/crate/crate-pdo
      */
     protected $options = array(
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDOCrateDB::ATTR_ERRMODE => PDOCrateDB::ERRMODE_EXCEPTION,
+        PDOCrateDB::ATTR_DEFAULT_FETCH_MODE => PDOCrateDB::FETCH_ASSOC,
     );
 
     /**
@@ -25,21 +25,21 @@ class Connector extends BaseConnector implements ConnectorInterface {
      * @param  string  $dsn
      * @param  array   $config
      * @param  array   $options
-     * @return \PDO
+     * @return \PDOCrateDB
      */
     public function createConnection($dsn, array $config, array $options)
     {
         $username = $config['username'] ?? null;
         $password = $config['password'] ?? null;
 
-        return new PDO($dsn, $username, $password, $options);
+        return new PDOCrateDB($dsn, $username, $password, $options);
     }
 
     /**
      * Establish a database connection.
      *
      * @param  array  $config
-     * @return \PDO
+     * @return \PDOCrateDB
      */
     public function connect(array $config)
     {

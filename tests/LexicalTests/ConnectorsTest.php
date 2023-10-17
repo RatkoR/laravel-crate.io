@@ -82,7 +82,7 @@ class ConnectorTest extends TestCase
         $connector = new Connector();
         $connection = $connector->connect(['host'=>'127.0.0.1','port'=>4200]);
 
-        $this->assertInstanceOf('Crate\PDO\PDO', $connection);
+        $this->assertInstanceOf('Crate\PDO\PDOCrateDB', $connection);
     }
 
     /** @test */
@@ -91,7 +91,7 @@ class ConnectorTest extends TestCase
         $connector = new Connector();
         $connection = $connector->connect(['host'=>'127.0.0.1,10.0.0.1','port'=>4200]);
 
-        $this->assertInstanceOf('Crate\PDO\PDO', $connection);
+        $this->assertInstanceOf('Crate\PDO\PDOCrateDB', $connection);
     }
 
 }
