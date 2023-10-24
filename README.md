@@ -27,13 +27,19 @@ DB servers a lot.
 
 ### Installation
 
-Laravel 5.5, 6, 7, 8 and 9 are supported.
+Laravel 5.5, 6, 7, 8, 9 and 10 are supported.
 
 Add a require to your composer.json :
 
 ```bash
     composer require ratkor/laravel-crate.io
 ```
+
+> [!NOTE]
+> Allways use tagged version in composer.json. Latest (master) version of laravel-crate.io
+> works only with latest laravel. Latest laravel has a bunch of different function
+> parameters in query parsing and you'll get parse errors if you'll try to use master
+> branch with older laravel.
 
 Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.
 
@@ -486,6 +492,10 @@ $article->delete();
 ```
 
 ### Changelog
+
+#### Version 13
+
+Support for laravel 10.
 
 #### Version 12
 

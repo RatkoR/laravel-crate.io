@@ -66,12 +66,12 @@ class Builder extends BaseBuilder
     /**
      * Not available in Crate.io
      *
-     * @param  \Closure $callback
+     * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $callback
      * @param  string   $boolean
      * @param  bool     $not
      * @return $this
      */
-    public function whereExists(Closure $callback, $boolean = 'and', $not = false)
+    public function whereExists($callback, $boolean = 'and', $not = false)
     {
         throw new NotImplementedException('whereExists is not implemented in Crate');
     }

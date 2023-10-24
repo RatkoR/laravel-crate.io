@@ -18,11 +18,11 @@ class QueryException extends BaseQueryException
      * @param  \Exception $previous
      * @return string
      */
-    protected function formatMessage($sql, $bindings, $previous)
+    protected function formatMessage($connectionName, $sql, $bindings, $previous)
     {
         $preparedBindings = $this->prepareBindings($bindings);
 
-        return $previous->getMessage().' (SQL: '.Str::replaceArray('?', $preparedBindings, $sql).')';
+        return $previous->getMessage().' (Connection: '.$connectionName.', SQL: '.Str::replaceArray('?', $preparedBindings, $sql).')';
     }
 
     /**

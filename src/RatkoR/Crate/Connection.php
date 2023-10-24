@@ -8,7 +8,7 @@ use RatkoR\Crate\Schema\Builder;
 use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;
 use RatkoR\Crate\Query\Grammars\Grammar as QueryGrammar;
 use RatkoR\Crate\Schema\Grammars\Grammar as SchemaGrammar;
-use Crate\PDO\PDO;
+use Crate\PDO\PDOCrateDB;
 use RatkoR\Crate\Query\Builder as QueryBuilder;
 use RatkoR\Crate\QueryException as QueryException;
 
@@ -161,25 +161,25 @@ class Connection extends \Illuminate\Database\Connection
     }
 
     /**
-     * Returns PDO::PARAM_* type based on parameter value.
+     * Returns PDOCrateDB::PARAM_* type based on parameter value.
      */
     protected function guessDataType($value)
     {
         switch (gettype($value)) {
             case 'array':
-                return PDO::PARAM_ARRAY;
+                return PDOCrateDB::PARAM_ARRAY;
             case 'object':
-                return PDO::PARAM_OBJECT;
+                return PDOCrateDB::PARAM_OBJECT;
             case 'double':
-                return PDO::PARAM_DOUBLE;
+                return PDOCrateDB::PARAM_DOUBLE;
             case 'boolean':
-                return PDO::PARAM_BOOL;
+                return PDOCrateDB::PARAM_BOOL;
             case 'NULL':
-                return PDO::PARAM_NULL;
+                return PDOCrateDB::PARAM_NULL;
             case 'integer':
-                return PDO::PARAM_LONG;
+                return PDOCrateDB::PARAM_LONG;
             default:
-                return PDO::PARAM_STR;
+                return PDOCrateDB::PARAM_STR;
         }
     }
 
@@ -225,12 +225,17 @@ class Connection extends \Illuminate\Database\Connection
         // message to include the bindings with SQL, which will make this exception a
         // lot more helpful to the developer instead of just the database's errors.
         catch (Exception $e) {
+            if ($this->isUniqueConstraintError($e)) {
+                throw new UniqueConstraintViolationException(
+                    $this->getName(), $query, $this->prepareBindings($bindings), $e
+                );
+            }
+
             throw new QueryException(
-                $query, $this->prepareBindings($bindings), $e
+                $this->getName(), $query, $this->prepareBindings($bindings), $e
             );
         }
 
         return $result;
     }
-
 }
