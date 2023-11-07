@@ -2,7 +2,8 @@ echo '---- starting docker container crate ----'
 docker run -d --name=crate01 \
       -p 4201:4200 \
       --env CRATE_HEAP_SIZE=2g \
-      crate -Cnetwork.host=_site_ \
+      crate/crate:nightly \
+            -Cnetwork.host=_site_ \
             -Cdiscovery.type=single-node
 
 echo '---- waiting for docker container crate to start ----'
