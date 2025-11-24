@@ -2,7 +2,6 @@
 
 namespace RatkoR\Crate\Schema;
 
-use RatkoR\Crate\Schema\Blueprint;
 use Closure;
 
 class Builder extends \Illuminate\Database\Schema\Builder
@@ -30,7 +29,7 @@ class Builder extends \Illuminate\Database\Schema\Builder
      * @param  string  $table
      * @return array
      */
-    public function getColumnListing($table)
+    public function getColumns($table)
     {
         $sql = $this->grammar->compileColumnExists();
 
@@ -40,7 +39,7 @@ class Builder extends \Illuminate\Database\Schema\Builder
 
         $results = $this->connection->select($sql, array($database, $table));
 
-        return $this->connection->getPostProcessor()->processColumnListing($results);
+        return $this->connection->getPostProcessor()->processColumns($results);
     }
 
 
@@ -51,7 +50,7 @@ class Builder extends \Illuminate\Database\Schema\Builder
      * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Schema\Blueprint
      */
-    protected function createBlueprint($table, Closure $callback = null)
+    protected function createBlueprint($table, ?Closure $callback = null)
     {
         if (isset($this->resolver)) {
             return call_user_func($this->resolver, $table, $callback);

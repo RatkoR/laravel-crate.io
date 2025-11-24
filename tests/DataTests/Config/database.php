@@ -7,7 +7,8 @@ return [
     'connections' => [
 
         'crate' => [
-            'name'	   => 'crate',
+            'driver'   => 'crate',
+            'name'     => 'crate',
             'host'     => 'localhost',
             'port'     => 4201,
             'database' => 'doc',

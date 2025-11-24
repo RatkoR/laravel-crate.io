@@ -416,18 +416,6 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
      * @param  \Illuminate\Support\Fluent  $command
      * @return string
      */
-    public function compileDropForeign(Blueprint $blueprint, Fluent $command)
-    {
-        return '';
-    }
-
-    /**
-     * Not used in Crate.io
-     *
-     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-     * @param  \Illuminate\Support\Fluent  $command
-     * @return string
-     */
     public function compileRename(Blueprint $blueprint, Fluent $command)
     {
         return '';

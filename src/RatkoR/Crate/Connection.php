@@ -5,7 +5,6 @@ namespace RatkoR\Crate;
 use Closure;
 use Exception;
 use RatkoR\Crate\Schema\Builder;
-use Crate\DBAL\Driver\PDOCrate\Driver as DoctrineDriver;
 use RatkoR\Crate\Query\Grammars\Grammar as QueryGrammar;
 use RatkoR\Crate\Schema\Grammars\Grammar as SchemaGrammar;
 use Crate\PDO\PDOCrateDB;
@@ -56,16 +55,6 @@ class Connection extends \Illuminate\Database\Connection
     protected function getDefaultPostProcessor()
     {
         return new Query\Processors\Processor;
-    }
-
-    /**
-     * Get the Doctrine DBAL driver.
-     *
-     * @return \Crate\DBAL\Driver\PDOCrate\Driver
-     */
-    protected function getDoctrineDriver()
-    {
-        return new DoctrineDriver;
     }
 
     /**

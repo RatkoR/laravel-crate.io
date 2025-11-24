@@ -26,7 +26,7 @@ class Model extends BaseModel
     /**
      * Get a new query builder instance for the connection.
      *
-     * @return Builder
+     * @return \Illuminate\Database\Query\Builder
      */
     protected function newBaseQueryBuilder()
     {

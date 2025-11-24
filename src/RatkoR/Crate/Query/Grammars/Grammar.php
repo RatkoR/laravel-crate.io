@@ -3,6 +3,7 @@
 namespace RatkoR\Crate\Query\Grammars;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Arr;
 
 class Grammar extends \Illuminate\Database\Query\Grammars\Grammar {
 
@@ -26,6 +27,15 @@ class Grammar extends \Illuminate\Database\Query\Grammars\Grammar {
     {
         $table = $this->wrapTable($query->from);
         return array('delete from '.$this->wrapTable($query->from) => array());
+    }
+
+    public function prepareBindingsForUpdate(array $bindings, array $values)
+    {
+        $cleanBindings = Arr::except($bindings, ['select', 'join']);
+
+        return array_values(
+            array_merge($bindings['join'], $values, Arr::flatten($cleanBindings))
+        );
     }
 
     /**
