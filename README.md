@@ -212,7 +212,7 @@ An example of schema in migration file would be:
             $table->bigInteger('nb_views');
             $table->timestamp('published_on');
 
-            $table->arrayField('images','object as (id integer, title string');
+            $table->arrayField('images','object as (id integer, title string)');
             $table->objectField('author','(dynamic) as (id integer, name string)');
 
             $table->timestamps();
@@ -311,7 +311,7 @@ Schema::drop('article');
 $table->objectField('field_name', 'object parameters');
 ```
 
-where `object parameters` can be any parameters that crate excepts for an object.
+where `object parameters` can be any parameters that crate expects for an object.
 See their [documentation](https://crate.io/docs/stable/sql/data_types.html#object)
 for objects. Examples would be:
 
