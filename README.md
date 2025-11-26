@@ -27,7 +27,14 @@ DB servers a lot.
 
 ### Installation
 
-Laravel 5.5, 6, 7, 8, 9 and 10 are supported.
+Laravel 5.5, 6, 7, 8, 9, 10 and 11 are supported.
+
+> [!NOTE]
+> This package passes all it's tests and my own basic validation.
+> It lacks production battle-testing as our systems run on earlier 
+> Laravel versions (and I don't use them for this other tests any more).
+> Please test thoroughly in your environment before production use, specially
+> if you're using Laravel 11+. Also see notes below for version info.
 
 Add a require to your composer.json :
 
@@ -492,6 +499,10 @@ $article->delete();
 ```
 
 ### Changelog
+
+#### Version 14
+
+Support for laravel 11. We tested with laravel framework v11.46.2.
 
 #### Version 13
 
