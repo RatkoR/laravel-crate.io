@@ -7,12 +7,12 @@ use Illuminate\Database\Query\Builder;
 class Processor extends \Illuminate\Database\Query\Processors\Processor
 {
     /**
-     * Process the results of a column listing query.
+     * Process the results of a columns query.
      *
      * @param  array  $results
      * @return array
      */
-    public function processColumnListing($results)
+    public function processColumns($results)
     {
         $mapping = function($r)
         {

@@ -25,7 +25,7 @@ class Connector extends BaseConnector implements ConnectorInterface {
      * @param  string  $dsn
      * @param  array   $config
      * @param  array   $options
-     * @return \PDOCrateDB
+     * @return PDOCrateDB
      */
     public function createConnection($dsn, array $config, array $options)
     {
@@ -39,7 +39,7 @@ class Connector extends BaseConnector implements ConnectorInterface {
      * Establish a database connection.
      *
      * @param  array  $config
-     * @return \PDOCrateDB
+     * @return PDOCrateDB
      */
     public function connect(array $config)
     {

@@ -4,7 +4,6 @@ namespace RatkoR\Crate\Query;
 
 use Illuminate\Database\Query\Builder as BaseBuilder;
 use RatkoR\Crate\NotImplementedException;
-use Closure;
 
 class Builder extends BaseBuilder
 {

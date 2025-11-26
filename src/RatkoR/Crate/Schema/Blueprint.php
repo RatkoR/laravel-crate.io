@@ -2,7 +2,6 @@
 
 namespace RatkoR\Crate\Schema;
 
-use Closure;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Arr;
@@ -93,7 +92,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
      * @param  string  $column
      * @return \Illuminate\Support\Fluent
      */
-    public function binary($column)
+    public function binary($column, $length = null, $fixed = false)
     {
         throw new NotImplementedException('Binary fields are not yet implemented in this project...');
     }
