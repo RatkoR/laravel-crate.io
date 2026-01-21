@@ -1,0 +1,63 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+  # Allow job to be triggered manually.
+  workflow_dispatch:
+
+# Cancel in-progress jobs when pushing to the same branch.
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  tests:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [
+          'ubuntu-latest',
+        ]
+        php-version: [
+          '8.0',
+          '8.1',
+          '8.2',
+          '8.3',
+          '8.4',
+          '8.5',
+        ]
+        cratedb-version: [
+          'nightly',
+        ]
+
+    # https://docs.github.com/en/free-pro-team@latest/actions/guides/about-service-containers
+    services:
+      cratedb:
+        image: crate/crate:${{ matrix.cratedb-version }}
+        ports:
+          - 4201:4200
+
+    # https://github.com/marketplace/actions/setup-php-action
+    name: PHP ${{ matrix.php-version }}, CrateDB ${{ matrix.cratedb-version }}
+    steps:
+
+      - name: Acquire sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+
+      - uses: ramsey/composer-install@v2
+
+      - name: Run tests
+        run: composer run test

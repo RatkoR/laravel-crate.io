@@ -44,5 +44,8 @@
                 "RatkoR\\Crate\\CrateServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
